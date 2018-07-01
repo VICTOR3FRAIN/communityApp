@@ -1007,6 +1007,12 @@
             .when('/editadhocquery/:id', {
                 templateUrl: 'views/adhocquery/editadhocquery.html'
             })
+            .when('/banks', {
+                templateUrl: 'views/organization/banks/list-banks.html'
+            })
+            .when('/bank/:bankId/accounts', {
+                templateUrl: 'views/organization/banks/accounts/list-accounts.html'
+            })
             .otherwise({
                 templateUrl: "views/errors/404.html"
             })
