@@ -698,7 +698,27 @@
                     twoFactorConfigResource: defineResource(apiVer+"/twofactor/configure", {}, {
                         getAllConfigs: {method: 'GET', params: {}},
                         put: {method: 'PUT', params: {}}
-                    })
+                    }),
+                    bankCatalogueResource: defineResource(apiVer + "/banks/:bankId", {bankId: "@bankId"}, {
+                        getAllBanks: {method: 'GET', params: {}, isArray: true},
+                        get: {method: 'GET', params: {bankId: '@bankId'}},
+                        update: { method: 'PUT', params: {bankId: '@bankId'}},
+                        delete: { method: 'DELETE', params: {bankId: '@bankId'}},
+                        save: {method: 'POST', params: {}}
+                    }),
+                    bankCatalogueOptionsResource: defineResource(apiVer + "/banks/template", {}, {
+                        get: {method: 'GET', params: {}},
+                    }),
+                    bankAccountsResource: defineResource(apiVer + "/bank/:bankId/accounts/:accountId", {bankId: "@bankId", accountId:"@accountId"}, {
+                        getAllAccounts: {method: 'GET', params: {bankId: '@bankId'}, isArray: true},
+                        get: {method: 'GET', params: {bankId: '@bankId', accountId: '@accountId'}},
+                        update: { method: 'PUT', params: {bankId: '@bankId', accountId: '@accountId'}},
+                        delete: { method: 'DELETE', params: {bankId: '@bankId', accountId: '@accountId'}},
+                        save: {method: 'POST', params: {bankId: '@bankId'}}
+                    }),
+                    bankAccountOptionsResource: defineResource(apiVer + "/bank/:bankId/accounts/template", {bankId: "@bankId"}, {
+                        get: {method: 'GET', params: {bankId: '@bankId'}},
+                    }),
                 };
             }];
         }

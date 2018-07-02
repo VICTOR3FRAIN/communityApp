@@ -322,8 +322,9 @@ define(['Q', 'underscore', 'mifosX'], function (Q) {
 			'adhocquery/AdHocQueryListController',
             'adhocquery/CreateAdHocQueryController',
             'adhocquery/ViewAdHocQueryController',
-            'adhocquery/EditAdHocQueryController'
-
+            'adhocquery/EditAdHocQueryController',
+            'organization/banks/BanksController',
+            'organization/banks/BankAccountsController',
         ],
         filters: [
             'StatusLookup',
