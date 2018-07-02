@@ -4288,5 +4288,7 @@
   "reportRunFrequency.monthly": "Monthly",
   "reportRunFrequency.yearly": "Yearly",
   "reportRunFrequency.custom": "Custom",
-  "----End---": "--End of file--- "
+  "----End---": "--End of file--- ",
+  "label.areyousureyouwanttodeletethebank": "Are you sure you want to delete the bank",
+  "label.areyousureyouwanttodeletethebankaccount": "Are you sure you want to delete the bank account"
 }

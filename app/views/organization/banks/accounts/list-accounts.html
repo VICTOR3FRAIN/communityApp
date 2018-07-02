@@ -40,7 +40,7 @@
                     <td>{{account.accUse.code | translate}}</td>
                     <td >
                         <a data-ng-click="editBankAccount(account.glAccount.id)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" title="{{'label.heading.edit_account' | translate}}" class="fa fa-edit "></i></a>
-                        <a data-ng-click="deleteBankAccount(account.glAccount.id)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" title="{{'label.heading.delete' | translate}}" class="fa fa-trash-o"></i></a>
+                        <a data-ng-click="deleteBankAccount(account.glAccount)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" title="{{'label.heading.delete' | translate}}" class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
                 </tbody>
@@ -96,6 +96,7 @@
         </div>
         <div class="modal-body ">
             <api-validate></api-validate>
+            <p>{{'label.areyousureyouwanttodeletethebankaccount' | translate}} {{account.name}}?</p>
             <br>
             <button class="btn btn-default" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
             <button class="btn btn-primary" ng-click="delete()">{{'label.button.confirm' | translate}}</button>

@@ -4029,5 +4029,7 @@
 	"bankAccountUse.catchment": "Captación",
 	"bankAccountUse.repayment": "Reembolso",
 	"bankAccountUse.disbursement": "Desembolso",
-	"label.input.ledger_account": "Cuenta contable"
+	"label.input.ledger_account": "Cuenta contable",
+	"label.areyousureyouwanttodeletethebank": "Estás seguro de eliminar el banco",
+	"label.areyousureyouwanttodeletethebankaccount": "Estás seguro de eliminar la cuenta"
 }
