@@ -84,12 +84,13 @@
                 });
             }
 
-            scope.deleteBankAccount = function(bankAccountId) {
+            scope.deleteBankAccount = function(bankAccount) {
                 $uibModal.open({
                     templateUrl: 'deletetemplate.html',
-                    controller: function ($scope, $uibModalInstance, updateList) {
+                    controller: function ($scope, $uibModalInstance, updateList, bankAccount) {
+                        $scope.account = bankAccount;
                         $scope.delete = function () {
-                            resourceFactory.bankAccountsResource.delete({bankId: routeParams.bankId, accountId: bankAccountId}, function (data) {
+                            resourceFactory.bankAccountsResource.delete({bankId: routeParams.bankId, accountId: bankAccount.id}, function (data) {
                                 updateList();
                                 $uibModalInstance.close();    
                             });
@@ -102,6 +103,9 @@
                     resolve: {
                         updateList: function(){
                             return loadAccounts;
+                        },
+                        bankAccount: function(){
+                            return bankAccount;
                         }
                     }
                 });

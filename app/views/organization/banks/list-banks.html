@@ -42,7 +42,7 @@
                         <i class="fa fa-eye" style="font-weight: bold" title="{{'label.heading.catalogue.banks.view_accounts' | translate}}"></i>
                     </a>
                     <a data-ng-click="editBank(bank.id)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" class="fa fa-edit " title="{{'label.heading.edit_bank' | translate}}"></i></a>
-                    <a data-ng-click="deleteBank(bank.id)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" class="fa fa-trash-o" title="{{'label.heading.delete' | translate}}"></i></a>
+                    <a data-ng-click="deleteBank(bank)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" class="fa fa-trash-o" title="{{'label.heading.delete' | translate}}"></i></a>
                 </td>
             </tr>
             </tbody>
@@ -92,6 +92,7 @@
     </div>
     <div class="modal-body ">
         <api-validate></api-validate>
+        <p>{{'label.areyousureyouwanttodeletethebank' | translate}} {{bank.name}}?</p>
         <br>
         <button class="btn btn-default" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
         <button class="btn btn-primary" ng-click="delete()">{{'label.button.confirm' | translate}}</button>

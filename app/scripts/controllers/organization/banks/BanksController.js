@@ -65,12 +65,13 @@
                 });
             }
 
-            scope.deleteBank = function(bankId) {
+            scope.deleteBank = function(bank) {
                 $uibModal.open({
                     templateUrl: 'deletetemplate.html',
-                    controller: function ($scope, $uibModalInstance, updateList) {
+                    controller: function ($scope, $uibModalInstance, updateList, bank) {
+                        $scope.bank = bank;
                         $scope.delete = function () {
-                            resourceFactory.bankCatalogueResource.delete({bankId: bankId}, function (data) {
+                            resourceFactory.bankCatalogueResource.delete({bankId: bank.id}, function (data) {
                                 updateList();
                                 $uibModalInstance.close();    
                             });
@@ -83,6 +84,9 @@
                     resolve: {
                         updateList: function(){
                             return loadBanks;
+                        },
+                        bank: function(){
+                            return bank;
                         }
                     }
                 });
