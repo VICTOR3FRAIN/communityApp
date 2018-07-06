@@ -4031,5 +4031,20 @@
 	"bankAccountUse.disbursement": "Desembolso",
 	"label.input.ledger_account": "Cuenta contable",
 	"label.areyousureyouwanttodeletethebank": "Estás seguro de eliminar el banco",
-	"label.areyousureyouwanttodeletethebankaccount": "Estás seguro de eliminar la cuenta"
+	"label.areyousureyouwanttodeletethebankaccount": "Estás seguro de eliminar la cuenta",
+	"label.anchor.loanbonusconfiguration": "Configuración de bonificación por pago puntual",
+	"label.clientmustcollectbonuswithin": "Días para entrega de bonificación",
+	"label.bonusloancyclesettings": "Rangos de ciclo de cliente",
+	"label.forloancyclebetween": "Rango entre",
+	"label.cyclebetween": "Rango entre",
+	"label.accountingssettings": "Configuración contable",
+	"label.debitglaccount": "Cuenta del pasivo",
+	"label.whenbonusispaid": "cuando la bonificación es pagada",
+	"label.creditglaccount": "Cuenta de gastos",
+	"label.percent": "Porcentaje",
+	"label.totaldaysinarrearallowed": "Días de atraso permitido",
+	"label.days": "días",
+	"label.attracts": "devuelve",
+	"label.anchor.loanbonusconfig": "Configuración de bonificación por pago puntual",
+	"label.loanbonusconfig": "Aprovisionamiento del bonificación por pago puntual que será devuelto al cliente al final del crédito"
 }

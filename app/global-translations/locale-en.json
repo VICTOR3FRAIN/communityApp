@@ -4290,5 +4290,20 @@
   "reportRunFrequency.custom": "Custom",
   "----End---": "--End of file--- ",
   "label.areyousureyouwanttodeletethebank": "Are you sure you want to delete the bank",
-  "label.areyousureyouwanttodeletethebankaccount": "Are you sure you want to delete the bank account"
+  "label.areyousureyouwanttodeletethebankaccount": "Are you sure you want to delete the bank account",
+  "label.anchor.loanbonusconfiguration": "Devolution Bonus Configuration",
+  "label.clientmustcollectbonuswithin": "Client must collect bonus within",
+  "label.bonusloancyclesettings": "Bonus loan cycle settings",
+  "label.forloancyclebetween": "For loan cycle between",
+  "label.cyclebetween": "Cycle between",
+  "label.accountingssettings": "Accounting settings",
+  "label.debitglaccount": "Debit GL Account",
+  "label.whenbonusispaid": "when bonus is paid",
+  "label.creditglaccount": "Credit GL Account",
+  "label.percent": "Percent",
+  "label.totaldaysinarrearallowed": "Total days in arrears allowed",
+  "label.days": "days",
+  "label.anchor.loanbonusconfig": "Devolution Bonus Configuration",
+  "label.loanbonusconfig": "Provisioning of the bonus for punctual payment that will be paid to the client at the end of the loan",
+	"label.attracts": "attracts"
 }

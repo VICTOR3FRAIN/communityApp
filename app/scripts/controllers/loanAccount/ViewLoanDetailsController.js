@@ -149,6 +149,24 @@
                 };
             };
 
+            var loadConfig = function () {
+                resourceFactory.loanBonusConfigResource.get(function (data) {
+                    scope.loanbonusconfig = data;
+                });   
+            }
+            loadConfig();
+
+            scope.calculateLoanExpectedBonus = function(){
+                var cycle = scope.loandetails.loanCounter;
+                console.log('cycle ', cycle);
+                for (let index = 0; index < scope.loanbonusconfig.cycles.length; index++) {
+                    const element = scope.loanbonusconfig.cycles[index];
+                    if(cycle >= element.fromValue && cycle <= element.toValue)
+                        return scope.loandetails.summary.interestCharged * (element.percentValue/100);
+                }
+                return 0;
+            }
+
             resourceFactory.LoanAccountResource.getLoanAccountDetails({loanId: routeParams.id, associations: 'all',exclude: 'guarantors,futureSchedule'}, function (data) {
                 scope.loandetails = data;
                 scope.convertDateArrayToObject('date');
