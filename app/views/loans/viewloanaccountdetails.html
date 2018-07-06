@@ -125,6 +125,7 @@
                                     data-ng-hide="loandetails.summary.totalOverdue>=0">{{'label.heading.notprovided' | translate}}</span></span></b>
                     <br>
                         <br>
+                        <b>Expected bonus: {{loandetails.currency.displaySymbol}} {{calculateLoanExpectedBonus() | number}} <button class="btn btn-small btn-danger">Pay</button></b>
                     <!--<b>{{'label.heading.amountDue' | translate}}(as of dd/mm/yyyy): <span class="padded-td">{{'label.heading.notprovided' | translate}}</span></b>-->
                     </div>
                     <br>
