@@ -21,23 +21,33 @@
             loadGlAccounts();
 
             scope.addCycle = function(){
+                scope.showErrorCycle = false;
+                angular.forEach(scope.loanbonusform.$$controls, function (field) {
+                    field.$validate();
+                });
                 if(scope.loanbonusform.cycleToValue.$valid &&
                     scope.loanbonusform.cycleFromValue.$valid &&
-                    scope.loanbonusform.cyclePercentValue.$valid){
+                    scope.loanbonusform.cyclePercentValue.$valid 
+                    && scope.newcycle.fromValue && scope.newcycle.toValue && scope.newcycle.percentValue){
                     if(!scope.formData.cycles)
                         scope.formData.cycles = [];
                     var conflict = false;
                     for (let index = 0; index < scope.formData.cycles.length; index++) {
                         const element = scope.formData.cycles[index];
-                        if(scope.newcycle.fromValue > element.fromValue && scope.newcycle.fromValue < element.toValue)
+                        if(scope.newcycle.fromValue >= element.fromValue && scope.newcycle.fromValue <= element.toValue)
                             conflict = true;
-                        if(scope.newcycle.toValue > element.fromValue && scope.newcycle.toValue < element.toValue)
+                        if(scope.newcycle.toValue >= element.fromValue && scope.newcycle.toValue <= element.toValue)
                             conflict = true;
+                    }
+                    if(conflict){
+                        scope.showErrorCycle = true;
+                        scope.errorMsgCycle = 'label.rangealreadyincluded';
                     }
                     if(!conflict){
                         scope.formData.cycles.push(scope.deepCopy(scope.newcycle));
                         scope.newcycle = {};
                     }
+                } else {
                 }
             }
 
@@ -48,10 +58,12 @@
             scope.save = function(){
                 if(scope.formData.id)
                     resourceFactory.loanBonusConfigResource.update({configId: scope.formData.id}, scope.formData, function (data) {
+                        scope.showSuccess = true;
                         loadConfig();
                     });
                 else
                     resourceFactory.loanBonusConfigResource.save(scope.formData, function (data) {
+                        scope.showSuccess = true;
                         loadConfig();
                     });
             }
