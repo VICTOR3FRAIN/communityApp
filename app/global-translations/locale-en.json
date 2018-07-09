@@ -4305,5 +4305,12 @@
   "label.days": "days",
   "label.anchor.loanbonusconfig": "Devolution Bonus Configuration",
   "label.loanbonusconfig": "Provisioning of the bonus for punctual payment that will be paid to the client at the end of the loan",
-	"label.attracts": "attracts"
+  "label.attracts": "attracts",
+  "label.expectedbonus": "Expected bonus",
+  "label.rangealreadyincluded": "Range already included",
+  "label.didnotentervalidnumber": "You did not enter a valid number",
+  "label.greaterthan": "Value shoul be greater than",
+  "label.cantbegreaterthan": "Value can't be greater than",
+  "label.configurationssaved": "The configurations were saved!",
+  "label.heading.totaldaysinarrear": "Days in arrear"
 }

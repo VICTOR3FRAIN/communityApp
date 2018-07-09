@@ -12,54 +12,88 @@
         <div class="content">
             <div class="row">
                 <div class="col-sm-12 col-md-12">
-                    <form name="loanbonusform" ng-submit="save()" >
-                        <div class="col-md-12">
-                            {{'label.totaldaysinarrearallowed' | translate}}
-                            <input type="number" ng-model="formData.daysInArrear" style="width: 60px">
-                        </div>
-                        <div class="col-md-12">
-                            {{'label.clientmustcollectbonuswithin' | translate}}
-                            <input type="number" ng-model="formData.daysToCollectBonus" style="width: 60px">
-                            {{'label.days' | translate}}
+                    <form name="loanbonusform" ng-submit="save()">
+                        <div style="display: table; padding: 10px;">
+                            <div style="display: table-row">
+                                <div style="display: table-cell; padding: 5px 10px;">{{'label.totaldaysinarrearallowed' | translate}}</div>
+                                <div style="display: table-cell; padding: 5px 10px;"><input min="1" type="number" ng-model="formData.daysInArrear" style="width: 60px"></div>
+                            </div>
+                            <div style="display: table-row">
+                                <div style="display: table-cell; padding: 5px 10px;">{{'label.clientmustcollectbonuswithin' | translate}}</div>
+                                <div style="display: table-cell; padding: 5px 10px;"><input min="1" type="number" ng-model="formData.daysToCollectBonus" style="width: 60px">
+                                    {{'label.days' | translate}}</div>
+                            </div>
                         </div>
 
                         <legend>{{'label.bonusloancyclesettings' | translate}}:<div></div></legend>
-                        <div class="text-center">
+                        <div style="padding: 20px;">
                             {{'label.forloancyclebetween' | translate}}
                             <input style="width: 60px" name="cycleToValue" type="number" min="1" max="{{newcycle.toValue}}" ng-model="newcycle.fromValue">
                             {{'label.and' | translate}} 
-                            <input style="width: 60px" name="cycleFromValue" type="number" min="{{}newcycle.fromValue}" max="999" ng-model="newcycle.toValue">
+                            <input style="width: 60px" name="cycleFromValue" type="number" min="{{newcycle.fromValue}" max="999" ng-model="newcycle.toValue">
                             {{'label.percent' | translate}} 
                              <input style="width: 60px" type="number" min="1" max="100" ng-model="newcycle.percentValue" name="cyclePercentValue"> 
-                             <a ng-click="addCycle()"><i class="fa fa-plus-square fa-2x"></i></a>
-                            <div class="text-center">
-                                <div ng-repeat="cycle in formData.cycles">
-                                    {{'label.cyclebetween' | translate}} {{cycle.fromValue}} {{'label.and' | translate}} {{cycle.toValue}} {{'label.attracts' | translate}} {{cycle.percentValue}}% <a ng-click="removeCycle($index)"><i class="fa fa-times fa-2x text-danger"></i></a>
+                             <a style="vertical-align: middle;display: inline-block;" ng-click="addCycle()"><i class="fa fa-plus-square fa-2x"></i></a>
+
+                             <div class="text-danger">
+                                <div ng-show="loanbonusform.cycleToValue.$error.number || loanbonusform.cycleFromValue.$error.number
+                                    || loanbonusform.percentValue.$error.number">{{'label.didnotentervalidnumber' | translate}}</div>
+                                <div ng-show="loanbonusform.cycleToValue.$error.min">{{'label.greaterthan' | translate}} 1</div>
+                                <div ng-show="loanbonusform.cycleToValue.$error.max">{{'label.cantbegreaterthan' | translate}} {{newcycle.toValue}}</div>
+
+                                <div ng-show="loanbonusform.cycleFromValue.$error.min">{{'label.greaterthan' | translate}} {{newcycle.fromValue}}</div>
+                                <div ng-show="loanbonusform.cycleFromValue.$error.max">{{'label.cantbegreaterthan' | translate}} 999</div>
+
+                                <div ng-show="loanbonusform.cyclePercentValue.$error.min">{{'label.greaterthan' | translate}} 1</div>
+                                <div ng-show="loanbonusform.cyclePercentValue.$error.max">{{'label.cantbegreaterthan' | translate}} 100</div>
+
+                             </div>
+                            
+                             <div class="alert alert-danger alert-dismissible fade in" ng-show="showErrorCycle" role="alert"> <button ng-click="showErrorCycle=false" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> {{errorMsgCycle | translate}} </div>
+                            <div style="padding: 20px;display: table;">
+                                <div ng-repeat="cycle in formData.cycles" style="display: table-row;">
+                                    <div style="display: table-cell;padding: 5px 5px;">{{'label.cyclebetween' | translate}} {{cycle.fromValue}} {{'label.and' | translate}} {{cycle.toValue}} {{'label.attracts' | translate}} {{cycle.percentValue}}%</div>
+                                    <div style="display: table-cell;padding: 5px 5px;"><a style="vertical-align: middle;display: inline-block;" ng-click="removeCycle($index)"><i class="fa fa-times fa-2x text-danger"></i></a></div>
                                 </div>
                             </div>
                         </div>
 
                         <legend>{{'label.accountingssettings' | translate}}:<div></div></legend>
-                        <div class="text-center">
-                            <div>
-                                {{'label.debitglaccount' | translate}} <input type="text" ng-model="formData.glAccountToDebit" placeholder="{{'label.input.ledger_account' | translate}}" 
-                                typeahead-on-select="selectGlAccountDebit()"
-                                uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
-                                {{'label.whenbonusispaid' | translate}}.
+                        <div style="display: table; padding: 15px;">
+                            <div style="display: table-row">
+                                <div style="display: table-cell; padding: 5px 5px;">
+                                    {{'label.debitglaccount' | translate}}
+                                </div>
+                                <div style="display: table-cell; padding: 5px 5px;">
+                                    <input type="text" ng-model="formData.glAccountToDebit" placeholder="{{'label.input.ledger_account' | translate}}" 
+                                    typeahead-on-select="selectGlAccountDebit()"
+                                    uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
+                                </div>
+                                <div style="display: table-cell; padding: 5px 5px;">
+                                    {{'label.whenbonusispaid' | translate}}.
+                                </div>
                             </div>
-                            <div>
-                                {{'label.creditglaccount' | translate}} <input type="text" ng-model="formData.glAccountToCredit" placeholder="{{'label.input.ledger_account' | translate}}" 
-                                typeahead-on-select="selectGlAccountCredit()"
-                                uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
-                                {{'label.whenbonusispaid' | translate}}.
+                            <div style="display: table-row">
+                                <div style="display: table-cell; padding: 5px 5px;">
+                                    {{'label.creditglaccount' | translate}}
+                                </div>
+                                <div style="display: table-cell; padding: 5px 5px;">
+                                        <input type="text" ng-model="formData.glAccountToCredit" placeholder="{{'label.input.ledger_account' | translate}}" 
+                                        typeahead-on-select="selectGlAccountCredit()"
+                                        uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
+                                </div>
+                                <div style="display: table-cell; padding: 5px 5px;">
+                                    {{'label.whenbonusispaid' | translate}}.
+                                </div>
                             </div>
                         </div>
                         <br>
                         <br>
-                        <div class="text-center">
+                        <div>
                             <button class="btn btn-primary" type="submit">{{'label.button.save' | translate}}</button>
                         </div>
                     </form>
+                    <div class="alert alert-success alert-dismissible fade in" ng-show="showSuccess" role="alert"> <button ng-click="showSuccess=false" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> {{'label.configurationssaved' | translate}} </div>
                 </div>
             </div>
         </div>

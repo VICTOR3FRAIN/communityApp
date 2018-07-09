@@ -4046,5 +4046,12 @@
 	"label.days": "días",
 	"label.attracts": "devuelve",
 	"label.anchor.loanbonusconfig": "Configuración de bonificación por pago puntual",
-	"label.loanbonusconfig": "Aprovisionamiento del bonificación por pago puntual que será devuelto al cliente al final del crédito"
+	"label.loanbonusconfig": "Aprovisionamiento del bonificación por pago puntual que será devuelto al cliente al final del crédito",
+	"label.expectedbonus": "Bonificación esperada",
+	"label.rangealreadyincluded": "Rango ya incluido",
+	"label.didnotentervalidnumber": "Número inválido",
+	"label.greaterthan": "Debe ser mayor que",
+	"label.cantbegreaterthan": "No debe ser mayor que",
+	"label.configurationssaved": "Se guardaron los cambios!",
+	"label.heading.totaldaysinarrear": "Días en mora"
 }

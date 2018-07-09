@@ -157,14 +157,72 @@
             loadConfig();
 
             scope.calculateLoanExpectedBonus = function(){
+                if(!scope.loandetails && !scope.loanbonusconfig)
+                    return 0;
+                if(scope.loansummary.totalDaysInArrear > scope.loanbonusconfig.daysInArrear)
+                    return 0;
                 var cycle = scope.loandetails.loanCounter;
-                console.log('cycle ', cycle);
                 for (let index = 0; index < scope.loanbonusconfig.cycles.length; index++) {
                     const element = scope.loanbonusconfig.cycles[index];
                     if(cycle >= element.fromValue && cycle <= element.toValue)
                         return scope.loandetails.summary.interestCharged * (element.percentValue/100);
                 }
                 return 0;
+            }
+
+            scope.showExpectedBonus = function(){
+                if(!scope.loandetails.status && !scope.loanbonusconfig)
+                    return false;
+                var show = scope.loandetails.status.active || scope.loandetails.status.closedObligationsMet ||
+                    scope.loandetails.status.overpaid;
+                    obligationsMetOnDate
+                var periods = scope.loandetails.repaymentSchedule.periods;
+                scope.loansummary = {
+                    totalDaysInArrear: 0
+                }
+                for (let index = 0; index < periods.length; index++) {
+                    if(index == 0)
+                        continue;
+                    const element = periods[index];
+                    var dueDate = new Date(element.dueDate[0], element.dueDate[1]-1, element.dueDate[2]);
+                    if(element.obligationsMetOnDate){
+                        var obligationsMetOnDate = new Date(element.obligationsMetOnDate[0], element.obligationsMetOnDate[1]-1, element.obligationsMetOnDate[2]);
+                        scope.loansummary.totalDaysInArrear += datediff(dueDate,obligationsMetOnDate);
+                    } else {
+                        var now = new Date();
+                        if(now > dueDate)
+                            scope.loansummary.totalDaysInArrear += datediff(dueDate,now);
+                    }
+                }
+                return show;
+            }
+
+            scope.showExpectedBonusPayButton = function(){
+                if(!scope.loandetails.status && !scope.loanbonusconfig)
+                    return false;
+                var show = scope.loandetails.status.closedObligationsMet ||
+                    scope.loandetails.status.overpaid;
+                var daysToCollectBonus = scope.loanbonusconfig.daysToCollectBonus;
+
+                var now = new Date();
+                var closedon_date_value = scope.loandetails.timeline.closedOnDate;
+                if(closedon_date_value){
+                    var closedon_date = new Date(closedon_date_value[0],closedon_date_value[1]-1, closedon_date_value[2]);
+                    var dates_diff = datediff(closedon_date, now);
+                    if(dates_diff < daysToCollectBonus){
+                        show = true;
+                    } else
+                        show = false;
+                } else
+                    show = false;
+                
+                return show;
+            }
+
+            function datediff(first, second) {
+                // Take the difference between the dates and divide by milliseconds per day.
+                // Round to nearest whole number to deal with DST.
+                return Math.round((second-first)/(1000*60*60*24));
             }
 
             resourceFactory.LoanAccountResource.getLoanAccountDetails({loanId: routeParams.id, associations: 'all',exclude: 'guarantors,futureSchedule'}, function (data) {
