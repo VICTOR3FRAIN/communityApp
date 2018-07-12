@@ -4312,5 +4312,8 @@
   "label.greaterthan": "Value shoul be greater than",
   "label.cantbegreaterthan": "Value can't be greater than",
   "label.configurationssaved": "The configurations were saved!",
-  "label.heading.totaldaysinarrear": "Days in arrear"
+  "label.heading.totaldaysinarrear": "Days in arrear",
+  "label.input.allowBonusConfiguration": "Allow Bonus Configuration",
+  "label.heading.loanbonusconfiguration": "Devolution Bonus Configuration"
+
 }

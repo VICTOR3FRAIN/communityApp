@@ -4,9 +4,9 @@
 
             var loadConfig = function () {
                 resourceFactory.loanBonusConfigResource.get(function (data) {
-                    scope.formData = data;
-                    scope.formData.glAccountToDebit = scope.formData.glAccountToDebit.glCode;
-                    scope.formData.glAccountToCredit = scope.formData.glAccountToCredit.glCode;
+                    scope.loanBonusFormData = data;
+                    scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
+                    scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
                 });   
             }
             loadConfig();
@@ -29,11 +29,11 @@
                     scope.loanbonusform.cycleFromValue.$valid &&
                     scope.loanbonusform.cyclePercentValue.$valid 
                     && scope.newcycle.fromValue && scope.newcycle.toValue && scope.newcycle.percentValue){
-                    if(!scope.formData.cycles)
-                        scope.formData.cycles = [];
+                    if(!scope.loanBonusFormData.cycles)
+                        scope.loanBonusFormData.cycles = [];
                     var conflict = false;
-                    for (let index = 0; index < scope.formData.cycles.length; index++) {
-                        const element = scope.formData.cycles[index];
+                    for (let index = 0; index < scope.loanBonusFormData.cycles.length; index++) {
+                        const element = scope.loanBonusFormData.cycles[index];
                         if(scope.newcycle.fromValue >= element.fromValue && scope.newcycle.fromValue <= element.toValue)
                             conflict = true;
                         if(scope.newcycle.toValue >= element.fromValue && scope.newcycle.toValue <= element.toValue)
@@ -44,7 +44,7 @@
                         scope.errorMsgCycle = 'label.rangealreadyincluded';
                     }
                     if(!conflict){
-                        scope.formData.cycles.push(scope.deepCopy(scope.newcycle));
+                        scope.loanBonusFormData.cycles.push(scope.deepCopy(scope.newcycle));
                         scope.newcycle = {};
                     }
                 } else {
@@ -52,30 +52,30 @@
             }
 
             scope.removeCycle = function(index){
-                scope.formData.cycles.splice(index, 1);
+                scope.loanBonusFormData.cycles.splice(index, 1);
             }
 
             scope.save = function(){
-                if(scope.formData.id)
-                    resourceFactory.loanBonusConfigResource.update({configId: scope.formData.id}, scope.formData, function (data) {
+                if(scope.loanBonusFormData.id)
+                    resourceFactory.loanBonusConfigResource.update({configId: scope.loanBonusFormData.id}, scope.loanBonusFormData, function (data) {
                         scope.showSuccess = true;
                         loadConfig();
                     });
                 else
-                    resourceFactory.loanBonusConfigResource.save(scope.formData, function (data) {
+                    resourceFactory.loanBonusConfigResource.save(scope.loanBonusFormData, function (data) {
                         scope.showSuccess = true;
                         loadConfig();
                     });
             }
 
             scope.selectGlAccountDebit = function(){
-                scope.formData.glAccountToDebitId = scope.formData.glAccountToDebit.id;
-                scope.formData.glAccountToDebit = scope.formData.glAccountToDebit.glCode;
+                scope.loanBonusFormData.glAccountToDebitId = scope.loanBonusFormData.glAccountToDebit.id;
+                scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
             }
 
             scope.selectGlAccountCredit = function(){
-                scope.formData.glAccountToCreditId = scope.formData.glAccountToCredit.id;
-                scope.formData.glAccountToCredit = scope.formData.glAccountToCredit.glCode;
+                scope.loanBonusFormData.glAccountToCreditId = scope.loanBonusFormData.glAccountToCredit.id;
+                scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
             }
 
             scope.deepCopy = function (obj) {

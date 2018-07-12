@@ -720,7 +720,7 @@
                         get: {method: 'GET', params: {bankId: '@bankId'}},
                     }),
                     loanBonusConfigResource: defineResource(apiVer + "/loan/bonus/configuration/:configId", {configId: "@configId"}, {
-                        get: {method: 'GET', params: {}},
+                        get: {method: 'GET', params: {configId: '@configId'}},
                         update: { method: 'PUT', params: {configId: '@configId'}},
                         save: {method: 'POST', params: {}}
                     })
