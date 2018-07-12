@@ -17,7 +17,7 @@
                 });   
             }
             var loadGlAccounts = function(){
-                resourceFactory.accountCoaResource.getAllAccountCoas({type: 1}, function (data) {
+                resourceFactory.accountCoaResource.getAllAccountCoas({usage: 1}, function (data) {
                     scope.glAccounts = data;
                     scope.glAccounts.forEach(element => {
                         element.autocompleteLabel = element.glCode + " " + element.name;

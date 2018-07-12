@@ -194,6 +194,8 @@
                             scope.loansummary.totalDaysInArrear += datediff(dueDate,now);
                     }
                 }
+                if(scope.loansummary.totalDaysInArrear < 0)
+                    scope.loansummary.totalDaysInArrear = 0;
                 return show;
             }
 
