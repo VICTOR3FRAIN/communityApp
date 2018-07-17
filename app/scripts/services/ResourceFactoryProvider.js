@@ -199,7 +199,8 @@
                         get: {method: 'GET', params: {}}
                     }),
                     loanTrxnsResource: defineResource(apiVer + "/loans/:loanId/transactions/:transactionId", {loanId: '@loanId', transactionId: '@transactionId'}, {
-                        get: {method: 'GET', params: {}}
+                        get: {method: 'GET', params: {}},
+                        payBonus: {method: 'POST', params: {loanId: '@loanId', command: 'loanbonus' }}
                     }),
                     LoanAccountResource: defineResource(apiVer + "/loans/:loanId/:resourceType/:chargeId", {loanId: '@loanId', resourceType: '@resourceType', chargeId: '@chargeId'}, {
                         getLoanAccountDetails: {method: 'GET', params: {}},
