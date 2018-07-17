@@ -527,6 +527,7 @@
                             location.path('/viewloanproduct/' + data.resourceId);
                         });
                     } else {
+                        scope.loanBonusFormData.loanProductId = routeParams.id;
                         resourceFactory.loanBonusConfigResource.save(scope.loanBonusFormData, function (data2) {
                             location.path('/viewloanproduct/' + data.resourceId);
                         });

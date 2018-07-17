@@ -127,7 +127,7 @@
                         <b>{{'label.heading.totaldaysinarrear' | translate}}: <span class="padded-td">{{loansummary.totalDaysInArrear | number}}</span> {{'label.days' | translate}}</b>
                     <br>
                         <br>
-                        <b><span ng-if="showExpectedBonus()">{{'label.expectedbonus' | translate}}: {{loandetails.currency.displaySymbol}} {{calculateLoanExpectedBonus() | number}}</span> <button ng-if="showExpectedBonusPayButton()" class="btn btn-small btn-danger">{{'label.button.pay' | translate}}</button></b>
+                        <b><span ng-if="showExpectedBonus()">{{'label.expectedbonus' | translate}}: {{loandetails.currency.displaySymbol}} {{calculateLoanExpectedBonus() | number}}</span> <button ng-if="showExpectedBonusPayButton()" ng-click="openDialog($event)" ng-disabled="showExpectedBonusPayButtonDisabled()" class="btn btn-small btn-danger">{{'label.button.pay' | translate}}</button></b>
                     <!--<b>{{'label.heading.amountDue' | translate}}(as of dd/mm/yyyy): <span class="padded-td">{{'label.heading.notprovided' | translate}}</span></b>-->
                     </div>
                     <br>
@@ -1031,5 +1031,24 @@
         <br>
         <button class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
         <button class="btn btn-primary" ng-click="delete()">{{'label.button.confirm' | translate}}</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="payBonus.html">
+    <div class="modal-header silver">
+        <h3 class="bolder">{{'label.heading.paybonusloan' | translate}}</h3>
+    </div>
+    <div class="modal-body ">
+        <api-validate></api-validate>
+        <form ng-submit="pay()" >
+            <div class="form-group">
+                <label for="date">{{'label.heading.date' | translate}}</label>
+                <input type="text" id="date" name="date" datepicker-pop="dd MMMM yyyy" ng-model="formData.transactionDate" is-open="opened"
+                                    min="closedOnDate" max="daysToCollectBonus" class="form-control" />
+            </div>
+            <br>
+            <button class="btn btn-default" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+            <button class="btn btn-primary" type="submit">{{'label.button.confirm' | translate}}</button>
+        </form>
     </div>
 </script>
