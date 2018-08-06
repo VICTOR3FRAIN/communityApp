@@ -724,7 +724,11 @@
                         get: {method: 'GET', params: {configId: '@configId'}},
                         update: { method: 'PUT', params: {configId: '@configId'}},
                         save: {method: 'POST', params: {}}
-                    })
+                    }),
+                    banksAccountsResource: defineResource(apiVer + "/banks/accounts", {}, {
+                        getRepaymentsAccounts: {method: 'GET', params: {usage: 2}, isArray: true},
+                        getDisbursementAccounts: {method: 'GET', params: {usage: 3}, isArray: true},
+                    }),
                 };
             }];
         }

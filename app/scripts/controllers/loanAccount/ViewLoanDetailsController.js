@@ -121,6 +121,26 @@
                     case "foreclosure":
                         location.path('loanforeclosure/' + accountId);
                         break;
+                    case "tarjetaROP":
+                        var reportURL = $rootScope.hostUrl + API_VERSION + "/runreports/Tarjeton de Referencias";
+                        reportURL += "?output-type=PDF&tenantIdentifier=" + $rootScope.tenantIdentifier + "&locale=" + scope.optlang.code + "&dateFormat=" + scope.df;
+
+                        var inQueryParameters = "&selected_name="+ scope.loandetails.clientId +"&selected_product="+ scope.loandetails.id +"";
+                        reportURL += inQueryParameters;
+                        // Allow untrusted urls for the ajax request.
+                        // http://docs.angularjs.org/error/$sce/insecurl
+                        reportURL = $sce.trustAsResourceUrl(reportURL);
+                        reportURL = $sce.valueOf(reportURL);
+                        http.get(reportURL, {responseType: 'arraybuffer'}).
+                        success(function(data, status, headers, config) {
+                            var contentType = headers('Content-Type');
+                            var file = new Blob([data], {type: contentType});
+                            var fileContent = URL.createObjectURL(file);
+
+                            // Pass the form data to the iframe as a data url.
+                            scope.baseURL = $sce.trustAsResourceUrl(fileContent);
+                        });
+                        break;
                 }
             };
 
@@ -513,6 +533,10 @@
                             {
                                 name: "button.recoverguarantee",
                                 taskPermissionName: 'RECOVERGUARANTEES_LOAN'
+                            },
+                            {
+                                name: "button.tarjetaROP",
+                                taskPermissionName: 'READ_REPORT'
                             }
                         ]
 
