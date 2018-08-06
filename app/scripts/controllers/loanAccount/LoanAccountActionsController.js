@@ -66,6 +66,30 @@
                 });
             };
 
+            var loadBankAccountsRepayments = function(){
+                scope.showBankAccount = true;
+                resourceFactory.banksAccountsResource.getRepaymentsAccounts(function (data) {
+                    scope.bankAccounts = data;
+                    scope.bankAccounts.forEach(element => {
+                        element.autocompleteLabel = element.glAccount.glCode + " " + element.name;
+                    });
+                });
+            }
+            var loadBankAccountsDisburse = function(){
+                scope.showBankAccount = true;
+                resourceFactory.banksAccountsResource.getDisbursementAccounts(function (data) {
+                    scope.bankAccounts = data;
+                    scope.bankAccounts.forEach(element => {
+                        element.autocompleteLabel = element.glAccount.glCode + " " + element.name;
+                    });
+                });
+            }
+
+            scope.selectBankAccount = function(){
+                scope.formData.bankAccountGLId = scope.formData.bankAccountGL.glAccount.id;
+                scope.formData.bankAccountGL = scope.formData.bankAccountGL.glAccount.glCode;
+            }
+
             scope.fetchEntities = function(entity,status,productId){
                 if(!productId){
                     resourceFactory.LoanAccountResource.getLoanAccountDetails({loanId: routeParams.id}, function (data) {
@@ -164,6 +188,7 @@
                     scope.taskPermissionName = 'DISBURSALUNDO_LOAN';
                     break;
                 case "disburse":
+                    loadBankAccountsDisburse();
                     scope.modelName = 'actualDisbursementDate';
                     resourceFactory.loanTrxnsTemplateResource.get({loanId: scope.accountId, command: 'disburse'}, function (data) {
                         scope.paymentTypes = data.paymentTypeOptions;
@@ -201,6 +226,7 @@
                     scope.taskPermissionName = 'DISBURSETOSAVINGS_LOAN';
                     break;
                 case "repayment":
+                    loadBankAccountsRepayments();   
                     scope.modelName = 'transactionDate';
                     resourceFactory.loanTrxnsTemplateResource.get({loanId: scope.accountId, command: 'repayment'}, function (data) {
                         scope.paymentTypes = data.paymentTypeOptions;

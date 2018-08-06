@@ -4314,6 +4314,8 @@
   "label.configurationssaved": "The configurations were saved!",
   "label.heading.totaldaysinarrear": "Days in arrear",
   "label.input.allowBonusConfiguration": "Allow Bonus Configuration",
-  "label.heading.loanbonusconfiguration": "Devolution Bonus Configuration"
+  "label.heading.loanbonusconfiguration": "Devolution Bonus Configuration",
+  "label.button.tarjetaROP": "OpenPay's References Card",
+  "label.heading.catalogue.banks.bank_account": "Bank Account"
 
 }

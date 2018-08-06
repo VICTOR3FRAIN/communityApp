@@ -4053,5 +4053,7 @@
 	"label.greaterthan": "Debe ser mayor que",
 	"label.cantbegreaterthan": "No debe ser mayor que",
 	"label.configurationssaved": "Se guardaron los cambios!",
-	"label.heading.totaldaysinarrear": "Días en mora"
+	"label.heading.totaldaysinarrear": "Días en mora",
+	"label.button.tarjetaROP": "Tarjeta de Referencias de OpenPay",
+	"label.heading.catalogue.banks.bank_account": "Cuenta de banco"
 }
