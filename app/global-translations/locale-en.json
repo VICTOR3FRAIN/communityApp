@@ -4316,6 +4316,6 @@
   "label.input.allowBonusConfiguration": "Allow Bonus Configuration",
   "label.heading.loanbonusconfiguration": "Devolution Bonus Configuration",
   "label.button.tarjetaROP": "OpenPay's References Card",
-  "label.heading.catalogue.banks.bank_account": "Bank Account"
-
+  "label.heading.catalogue.banks.bank_account": "Bank Account",
+	"label.input.bank_account_name": "Bank account name"
 }

@@ -4055,5 +4055,6 @@
 	"label.configurationssaved": "Se guardaron los cambios!",
 	"label.heading.totaldaysinarrear": "Días en mora",
 	"label.button.tarjetaROP": "Tarjeta de Referencias de OpenPay",
-	"label.heading.catalogue.banks.bank_account": "Cuenta de banco"
+	"label.heading.catalogue.banks.bank_account": "Cuenta de banco",
+	"label.input.bank_account_name": "Nombre cuenta de banco"
 }
