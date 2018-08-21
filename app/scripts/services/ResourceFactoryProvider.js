@@ -44,6 +44,9 @@
                     officeImportTemplateResource: defineResource(apiVer + "/offices/bulkimporttemplate", {}, {
                     		get: {method: 'GET', params: {}}
                     }),
+                    officeTemplateResource: defineResource(apiVer + "/offices/template", {}, {
+                        get: {method: 'GET', params: {}}
+                    }),
                     importResource: defineResource(apiVer + "/imports", {}, {
                 			getImports: {method: 'GET', params: {}, isArray: true}
                     }),

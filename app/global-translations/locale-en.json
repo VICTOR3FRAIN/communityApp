@@ -4317,5 +4317,16 @@
   "label.heading.loanbonusconfiguration": "Devolution Bonus Configuration",
   "label.button.tarjetaROP": "OpenPay's References Card",
   "label.heading.catalogue.banks.bank_account": "Bank Account",
-	"label.input.bank_account_name": "Bank account name"
+  "label.input.bank_account_name": "Bank account name",
+  "label.input.officetype": "Office Type",
+  "officeType.root": "Root",
+  "officeType.group": "Group",
+  "officeType.office": "Office",
+  "label.input.colony": "Colony",
+  "label.input.postalcode": "Postal Code",
+  "label.input.phone": "Phone",
+  "label.input.municipality": "Municipality",
+  "label.input.state": "State",
+  "label.input.une": "UNE",
+  "error.msg.office.wrong.hierarchy": "Wrong parent, hierarchy check failed."
 }

@@ -53,7 +53,73 @@
     		                <div class="col-sm-3">
     		                    <input id="externalId" type="text" name="externalId" class="form-control" ng-model="formData.externalId">
     		                </div>
-    		            </div>
+						</div>
+						
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.officetype' | translate }}<span class="required">*</span></label>
+    		
+    		                <div class="col-sm-3">
+    		                    <select id="officeTypeId" ng-model="formData.officeTypeId" class="form-control"
+    		                            ng-options="officeType.id as officeType.code | translate for officeType in officeTypes"></select>
+    		                </div>
+						</div>
+						
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.address' | translate }}</label>
+    		
+    		                <div class="col-sm-3">
+    		                    <input id="address" type="text" name="address" class="form-control" ng-model="formData.address">
+    		                </div>
+						</div>
+
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.colony' | translate }}</label>
+    		
+    		                <div class="col-sm-3">
+    		                    <input id="colony" type="text" name="colony" class="form-control" ng-model="formData.colony">
+    		                </div>
+						</div>
+
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.postalcode' | translate }}</label>
+    		
+    		                <div class="col-sm-3">
+    		                    <input id="postalcode" type="text" name="postalcode" class="form-control" ng-model="formData.postalCode">
+    		                </div>
+						</div>
+
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.phone' | translate }}</label>
+    		
+    		                <div class="col-sm-3">
+    		                    <input id="phone" type="text" name="phone" class="form-control" ng-model="formData.phone">
+    		                </div>
+						</div>
+
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.municipality' | translate }}</label>
+    		
+    		                <div class="col-sm-3">
+    		                    <input id="municipality" type="text" name="municipality" class="form-control" ng-model="formData.municipality">
+    		                </div>
+						</div>
+
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.state' | translate }}</label>
+    		
+    		                <div class="col-sm-3">
+    		                    <input id="state" type="text" name="state" class="form-control" ng-model="formData.state">
+    		                </div>
+						</div>
+
+						<div class="form-group">
+    		                <label class="control-label col-sm-2">{{ 'label.input.une' | translate }}</label>
+    		
+    		                <div class="col-sm-8">
+    		                    <textarea rows="8" id="une" type="text" name="une" class="form-control" ng-model="formData.une"></textarea>
+    		                </div>
+						</div>
+
     		        <div class="col-md-offset-3">
     		            <a id="cancel" href="#/offices">
     		                <button type="reset" class="btn btn-default">{{'label.button.cancel' | translate}}</button>
