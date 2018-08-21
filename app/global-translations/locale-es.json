@@ -4055,5 +4055,16 @@
 	"label.configurationssaved": "Se guardaron los cambios!",
 	"label.heading.totaldaysinarrear": "Días en mora",
 	"label.button.tarjetaROP": "Tarjeta de Referencias de OpenPay",
-	"label.heading.catalogue.banks.bank_account": "Cuenta de banco"
+	"label.heading.catalogue.banks.bank_account": "Cuenta de banco",
+	"label.input.bank_account_name": "Nombre cuenta de banco",
+	"label.input.officetype": "Tipo",
+	"officeType.root": "Raíz",
+	"officeType.group": "Grupo",
+	"officeType.office": "Oficina",
+	"label.input.colony": "Colonia",
+	"label.input.postalcode": "Código Postal",
+	"label.input.phone": "Teléfono",
+	"label.input.municipality": "Municipio",
+	"label.input.state": "Estado",
+	"label.input.une": "UNE"
 }

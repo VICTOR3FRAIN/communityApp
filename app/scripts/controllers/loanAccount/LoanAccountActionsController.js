@@ -71,7 +71,7 @@
                 resourceFactory.banksAccountsResource.getRepaymentsAccounts(function (data) {
                     scope.bankAccounts = data;
                     scope.bankAccounts.forEach(element => {
-                        element.autocompleteLabel = element.glAccount.glCode + " " + element.name;
+                        element.autocompleteLabel = element.externalCode + " " + element.name;
                     });
                 });
             }
@@ -87,7 +87,7 @@
 
             scope.selectBankAccount = function(){
                 scope.formData.bankAccountGLId = scope.formData.bankAccountGL.glAccount.id;
-                scope.formData.bankAccountGL = scope.formData.bankAccountGL.glAccount.glCode;
+                scope.formData.bankAccountGL = scope.formData.bankAccountGL.name;
             }
 
             scope.fetchEntities = function(entity,status,productId){

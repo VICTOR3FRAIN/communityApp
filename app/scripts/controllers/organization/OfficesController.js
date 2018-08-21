@@ -60,8 +60,13 @@
                     if (typeof currentObj.parentId === "undefined") {
                         root.push(currentObj);
                     } else {
-                        parentNode = idToNodeMap[currentObj.parentId];
-                        parentNode.children.push(currentObj);
+                        if(currentObj.officeType.id != 1){
+                            parentNode = idToNodeMap[currentObj.parentId];
+                            if(currentObj.officeType.id === 2 && parentNode.officeType.id === 1)
+                                parentNode.children.push(currentObj);
+                            if(currentObj.officeType.id === 3 && parentNode.officeType.id === 2)
+                                parentNode.children.push(currentObj);
+                        }
                     }
                 }
                 scope.treedata = root;
