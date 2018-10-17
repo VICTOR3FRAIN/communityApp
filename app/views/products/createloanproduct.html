@@ -1325,6 +1325,38 @@
                     </tr>
                 </table>
             </div>
+            <h3>{{ 'label.heading.taxesoninterest' | translate }}</h3>
+            <hr>
+            <div class="form-group">
+                <div class="col-sm-3">
+                    <select id="taxGroupId" ng-model="taxGroupId" class="form-control"
+                            ng-options="group.id as group.name for group in taxGroups"
+                            value="{{penality.id}}">
+                        <option class="displaynone" value="">{{'label.selecttaxgroup' | translate}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" class="btn btn-primary"
+                            ng-click="taxGroupSelected(taxGroupId)">{{ 'label.button.add' | translate }}
+                    </button>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <table class="table width100">
+                    <tr class="graybg">
+                        <th>{{'label.heading.name' | translate}}</th>
+                        <th>{{'label.heading.percentage' | translate}}</th>
+                        <th>{{'label.heading.startdate' | translate}}</th>
+                        <th>{{'label.heading.actions' | translate}}</th>
+                    </tr>
+                    <tr ng-repeat="component in taxComponents">
+                        <td>{{component.name}}</td>
+                        <td><input type="text" ng-model="component.percentage"/></td>
+                        <td>{{component.startDate | DateFormat}}</td>
+                        <td><a ng-click="deleteTaxComponent($index)"><i class="fa fa-times-circle fa-2x"></i></a></td>
+                    </tr>
+                </table>
+            </div>
                     <hr>
                     <button class = "btn btn-default pull-left" wz-previous><i class = "fa fa-arrow-left"></i>&nbsp;&nbsp;Previous</button>
                     <button class = "btn btn-default pull-right" type="submit">Next&nbsp;&nbsp;<i class = "fa fa-arrow-right"></i></button>
@@ -2082,6 +2114,25 @@
                 <tr>
                     <td colspan="4"><br/></td>
                 </tr>
+
+                <tr class="bottomborder">
+                    <td colspan="4"><strong>{{'label.heading.taxesoninterest' | translate}}</strong></td>
+                </tr>
+                <tr class="bottomborder graybg">
+                    <td>{{'label.heading.name' | translate}}</td>
+                    <td>{{'label.heading.percentage' | translate}}</td>
+                    <td>{{'label.heading.startdate' | translate}}</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr ng-repeat="component in taxComponents">
+                    <td>{{component.name}}</td>
+                    <td>{{component.percentage}}</td>
+                    <td>{{component.startDate | DateFormat}}</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><br/></td>
+                </tr>    
 
                 <tr class="bottomborder">
                     <td><strong>{{'label.heading.accounting' | translate}}</strong></td>

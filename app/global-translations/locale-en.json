@@ -4328,5 +4328,10 @@
   "label.input.municipality": "Municipality",
   "label.input.state": "State",
   "label.input.une": "UNE",
-  "error.msg.office.wrong.hierarchy": "Wrong parent, hierarchy check failed."
+  "error.msg.office.wrong.hierarchy": "Wrong parent, hierarchy check failed.",
+  "label.heading.taxesoninterest": "Taxes on Interest",
+	"label.heading.taxes": "Taxes",
+	"label.selecttaxgroup": "Select Tax Group",
+  "label.heading.interestPaid": "Interest Paid",
+  "label.heading.taxsummary": "Tax Summary"
 }

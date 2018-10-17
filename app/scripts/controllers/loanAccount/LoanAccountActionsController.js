@@ -246,6 +246,7 @@
                     scope.taskPermissionName = 'REPAYMENT_LOAN';
                     break;
                 case "prepayloan":
+                    loadBankAccountsRepayments();
                     scope.modelName = 'transactionDate';
                     scope.formData.transactionDate =  new Date();
                     resourceFactory.loanTrxnsTemplateResource.get({loanId: scope.accountId, command: 'prepayLoan'}, function (data) {

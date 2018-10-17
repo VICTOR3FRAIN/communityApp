@@ -43,6 +43,17 @@
                         scope.overduecharges.push(scope.penaltyOptions[i]);
                     }
                 }
+                if (data.taxComponents) {
+					scope.taxComponents = data.taxComponents.map(function(x) {
+						return {
+							id: x.taxComponent.id,
+							percentage: x.percentage,
+							name: x.taxComponent.name,
+							startDate: x.taxComponent.startDate
+						};
+					});
+				}
+
                 scope.product.interestRecalculationNthDayTypeOptions.push({"code" : "onDay", "id" : -2, "value" : "on day"});
                 scope.formData = {
                     name: scope.product.name,
@@ -260,6 +271,20 @@
                 scope.charges.splice(index, 1);
             };
 
+            scope.taxGroupSelected = function (groupId) {
+				var group = scope.taxGroups.filter(function(x) { return x.id === groupId; })[0];
+				if (group) {
+					scope.taxComponents = group.taxAssociations.map(function(x) {
+						x.taxComponent.startDate = x.startDate;
+						return x.taxComponent;
+					});
+				}
+			};
+
+			scope.deleteTaxComponent = function(index) {
+				scope.taxComponents.splice(index, 1);
+			};
+
             //advanced accounting rule
             scope.showOrHide = function (showOrHideValue) {
                 if (showOrHideValue == "show") {
@@ -458,6 +483,7 @@
                 this.formData.locale = scope.optlang.code;
                 this.formData.startDate = reqFirstDate;
                 this.formData.closeDate = reqSecondDate;
+                this.formData.taxComponents = scope.taxComponents;
 
                 //Interest recalculation data
                 if (this.formData.isInterestRecalculationEnabled) {
