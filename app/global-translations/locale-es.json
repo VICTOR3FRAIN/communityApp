@@ -4066,5 +4066,11 @@
 	"label.input.phone": "Teléfono",
 	"label.input.municipality": "Municipio",
 	"label.input.state": "Estado",
-	"label.input.une": "UNE"
+	"label.input.une": "UNE",
+	"label.heading.interestPaid": "Interés pagado",
+	"label.heading.taxsummary": "Resumen de impuestos",
+	"label.heading.taxesoninterest": "Impuestos sobre interés",
+	"label.heading.taxes": "Impuestos",
+	"label.selecttaxgroup": "Seleccione grupo de impuestos"
+
 }

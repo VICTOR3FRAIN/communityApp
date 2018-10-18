@@ -548,7 +548,7 @@
 
                                 <td>{{period.principalDue | number}}</td>
                                 <td>{{period.principalLoanBalanceOutstanding | number}}</td>
-                                <td>{{period.interestOriginalDue | number}}</td>
+                                <td>{{(period.interestOriginalDue + period.taxOnInterestDue) | number}}</td>
                                 <td>{{period.feeChargesDue | number}}</td>
                                 <td>{{period.penaltyChargesDue | number}}</td>
 
@@ -568,7 +568,7 @@
 
                                 <th>{{loandetails.repaymentSchedule.totalPrincipalExpected | number}}</th>
                                 <th>&nbsp;</th>
-                                <th>{{loandetails.repaymentSchedule.totalInterestCharged | number}}</th>
+                                <th>{{(loandetails.repaymentSchedule.totalInterestCharged  + loandetails.repaymentSchedule.totalTaxes) | number}}</th>
                                 <th>{{loandetails.repaymentSchedule.totalFeeChargesCharged | number}}</th>
                                 <th>{{loandetails.repaymentSchedule.totalPenaltyChargesCharged | number}}</th>
 
@@ -870,6 +870,53 @@
                             </tr>
                         </table>
                     </uib-tab>
+
+                    <uib-tab ng-show="loandetails.taxes && loandetails.taxes.length" heading="{{'label.heading.taxes' | translate}}">
+                        <table class="table table-striped .width100">
+                            <colgroup span="4"></colgroup>
+                            <thead>
+                            <tr>
+                                <th colspan="1" scope="colgroup"></th>
+                                <th colspan="{{loandetails.taxes.length}}" scope="colgroup">{{"label.heading.taxsummary" | translate}}</th>
+                            </tr>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{"label.heading.interest" | translate}}</td>
+                                    <td ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.percentage}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h3><strong>{{"label.heading.taxesoninterest" | translate}} <a ng-click="showTaxOnInterestTable = !showTaxOnInterestTable"><i class="fa fa-eye" ng-hide="showTaxOnInterestTable" title="Display"></i><i ng-show="showTaxOnInterestTable" class="fa fa-eye-slash" title="Display"></i></a></strong></h3>
+                        <hr>
+                        <table class="table table-striped .width100" ng-show="showTaxOnInterestTable">
+                            <colgroup span="4"></colgroup>
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">{{"label.heading.interest" | translate}}</th>
+                                <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
+                                <th scope="col">{{"label.heading.interestPaid" | translate}}</th>
+                                <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
+                                <th scope="col">{{"label.heading.total" | translate}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="period in loandetails.repaymentSchedule.periods | limitTo: (1 - loandetails.repaymentSchedule.periods.length)" >
+                                    <td scope="row">{{period.period}}</td>
+                                    <td>{{(period.interestOriginalDue + period.taxOnInterestDue) | number}}</td>
+                                    <td ng-repeat="tax in loandetails.taxes">{{period.interestOriginalDue * (tax.loanProductTaxComponent.percentage/100) | number}}</td>
+                                    <td>{{(period.interestPaid + period.taxOnInterestPaid) | number}}</td>
+                                    <td ng-repeat="tax in loandetails.taxes">{{period.interestPaid * (tax.loanProductTaxComponent.percentage/100) | number}}</td>
+                                    <td>{{period.taxOnInterestPaid | number}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </uib-tab>    
 
                     <uib-tab heading="{{'label.heading.loandocuments' | translate}}" select="getLoanDocuments()">
                         <div class="pull-right" data-ng-show="choice">

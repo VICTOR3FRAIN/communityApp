@@ -85,6 +85,11 @@
                 scope.isClicked = false;
             });
 
+            resourceFactory.taxgroup.getAll(function (data) {
+				scope.taxGroups = data;
+			});
+
+
              scope.$watch('formData',function(newVal){
                 scope.loanproduct = angular.extend(scope.loanproduct,newVal);
              },true);
@@ -125,6 +130,21 @@
             scope.deleteCharge = function (index) {
                 scope.charges.splice(index, 1);
             };
+
+            scope.taxGroupSelected = function (groupId) {
+				var group = scope.taxGroups.filter(function(x) { return x.id === groupId; })[0];
+				if (group) {
+					scope.taxComponents = group.taxAssociations.map(function(x) {
+						x.taxComponent.startDate = x.startDate;
+						x.taxComponent.excluded = x.excluded;
+						return x.taxComponent;
+					});
+				}
+            };
+            
+            scope.deleteTaxComponent = function(index) {
+				scope.taxComponents.splice(index, 1);
+			};
 
             //advanced accounting rule
             scope.showOrHide = function (showOrHideValue) {
@@ -326,6 +346,7 @@
                 this.formData.dateFormat = scope.df;
                 this.formData.startDate = reqFirstDate;
                 this.formData.closeDate = reqSecondDate;
+                this.formData.taxComponents = scope.taxComponents;
 
                 //Interest recalculation data
                 if (this.formData.isInterestRecalculationEnabled) {

@@ -699,6 +699,26 @@
                     </div>
                     <br>
 
+                    <div ng-show="loanaccountinfo.product.taxComponents && loanaccountinfo.product.taxComponents.length">
+                        <label>
+                            <strong>{{ 'label.heading.taxesoninterest' | translate }}</strong>
+                        </label>
+                        <table class="width100">
+                            <tr class="graybg">
+                                <th>{{'label.heading.name' | translate}}</th>
+                                <th>{{'label.heading.percentage' | translate}}</th>
+                                <th>{{'label.heading.startdate' | translate}}</th>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr ng-repeat="component in loanaccountinfo.product.taxComponents">
+                                <td>{{component.taxComponent.name}}</td>
+                                <td>{{component.percentage}}</td>
+                                <td>{{component.taxComponent.startDate | DateFormat}}</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
 
                     <div ng-show="loanaccountinfo">
                         <span>

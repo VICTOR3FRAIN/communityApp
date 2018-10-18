@@ -4053,5 +4053,10 @@
 	"label.greaterthan": "Debe ser mayor que",
 	"label.cantbegreaterthan": "No debe ser mayor que",
 	"label.configurationssaved": "Se guardaron los cambios!",
-	"label.heading.totaldaysinarrear": "Días en mora"
+	"label.heading.totaldaysinarrear": "Días en mora",
+	"label.heading.interestPaid": "Interés pagado",
+	"label.heading.taxsummary": "Resumen de impuestos",
+	"label.heading.taxesoninterest": "Impuestos sobre interés",
+	"label.heading.taxes": "Impuestos",
+	"label.selecttaxgroup": "Seleccione grupo de impuestos"
 }
