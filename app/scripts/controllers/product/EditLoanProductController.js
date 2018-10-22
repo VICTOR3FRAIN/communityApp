@@ -255,6 +255,10 @@
                 scope.formData.canUseForTopup = scope.product.canUseForTopup;
             });
 
+            resourceFactory.taxgroup.getAll(function (data) {
+				scope.taxGroups = data;
+			});
+
             scope.chargeSelected = function (chargeId) {
                 if(chargeId){
                     resourceFactory.chargeResource.get({chargeId: chargeId, template: 'true'}, this.formData, function (data) {
@@ -574,8 +578,10 @@
             var loadConfig = function () {
                 resourceFactory.loanBonusConfigResource.get({configId: routeParams.id}, function (data) {
                     scope.loanBonusFormData = data;
-                    scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
-                    scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
+                    if(scope.loanBonusFormData.glAccountToDebit)
+                        scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
+                    if(scope.loanBonusFormData.glAccountToCredit)
+                        scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
                 });   
             }
             loadConfig();
