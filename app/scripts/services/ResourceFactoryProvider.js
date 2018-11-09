@@ -723,6 +723,11 @@
                     bankAccountOptionsResource: defineResource(apiVer + "/bank/:bankId/accounts/template", {bankId: "@bankId"}, {
                         get: {method: 'GET', params: {bankId: '@bankId'}},
                     }),
+                    loanBonusResource: defineResource(apiVer + "/loan/:loanId/bonus", {loanId: "@loanId"}, {
+                        get: {method: 'GET', params: {loanId: '@loanId'}},
+                        collect: {method: 'POST', params: {loanId: '@loanId', command: 'collect'}},
+                        cancel: {method: 'POST', params: {loanId: '@loanId', command: 'cancel'}},
+                    }),
                     loanBonusConfigResource: defineResource(apiVer + "/loan/bonus/configuration/:configId", {configId: "@configId"}, {
                         get: {method: 'GET', params: {configId: '@configId'}},
                         update: { method: 'PUT', params: {configId: '@configId'}},

@@ -169,27 +169,17 @@
                 };
             };
 
-            var loadConfig = function (loanProductId) {
-                resourceFactory.loanBonusConfigResource.get({configId: loanProductId},function (data) {
-                    scope.loanbonusconfig = data;
+            var loadLoanBonusData = function (loanId) {
+                resourceFactory.loanBonusResource.get({loanId: loanId},function (data) {
+                    scope.loanbonusdata = data;
                 });   
             }
 
-            scope.calculateLoanExpectedBonus = function(){
-                if(!scope.loandetails && !scope.loanbonusconfig.daysInArrear && !scope.loanbonusconfig.cycles)
-                    return 0;
-                if(scope.loansummary.totalDaysInArrear > scope.loanbonusconfig.daysInArrear)
-                    return 0;
-                var cycle = scope.loandetails.loanCounter;
-                for (let index = 0; index < scope.loanbonusconfig.cycles.length; index++) {
-                    const element = scope.loanbonusconfig.cycles[index];
-                    if(cycle >= element.fromValue && cycle <= element.toValue)
-                        return scope.loandetails.summary.interestCharged * (element.percentValue/100);
-                }
-                return 0;
+            scope.collectLoanBonus = function(ev) {
+                openBonusDialog(true);
             }
 
-            scope.openDialog = function(ev) {
+            function openBonusDialog(collect) {
                 var modalInstance = $uibModal.open({
                     templateUrl: 'payBonus.html',
                     controller: PayBonusCtrl,
@@ -197,147 +187,50 @@
                         resourceFactory: function(){
                             return resourceFactory;
                         },
-                        closedOnDate: function () {
-                            return new Date(scope.loandetails.timeline.closedOnDate[0], scope.loandetails.timeline.closedOnDate[1]-1, scope.loandetails.timeline.closedOnDate[2]);
+                        collect: function(){
+                            return collect;
                         },
-                        daysToCollectBonus: function () {
-                            return scope.loanbonusconfig.daysToCollectBonus;
-                        },
-                        amount: function () {
-                            return scope.calculateLoanExpectedBonus();
-                        },
-                        locale: function () {
-                            return scope.optlang.code;
-                        },
-                        dateFormat: function () {
+                        dateFormat: function(){
                             return scope.df;
                         },
-                        glAccountToDebitId: function () {
-                            return scope.loanbonusconfig.glAccountToDebit.id;
-                        },
-                        glAccountToCreditId: function () {
-                            return scope.loanbonusconfig.glAccountToCredit.id;
+                        locale:function(){
+                            return scope.optlang.code;
                         }
                     }
                 });
                 modalInstance.result.then(function() {
+                    loadLoanBonusData(scope.loandetails.id);
                 });
             }
 
-            var PayBonusCtrl = function ($scope, $uibModalInstance, resourceFactory, closedOnDate, 
-                daysToCollectBonus, amount, locale, dateFormat, glAccountToDebitId, glAccountToCreditId) {
+            scope.cancelLoanBonus = function(ev) {
+                openBonusDialog(false);
+            }
+
+            var PayBonusCtrl = function ($scope, $uibModalInstance, resourceFactory, collect, dateFormat, locale) {
                 $scope.formData = {};
                 $scope.formData.locale = locale;
-                $scope.formData.dateFormat= dateFormat;
-                $scope.formData.amount = amount;
-                $scope.formData.glAccountToDebitId = glAccountToDebitId;
-                $scope.formData.glAccountToCreditId = glAccountToCreditId;
-                $scope.closedOnDate = closedOnDate;
-                $scope.daysToCollectBonus = addDays(closedOnDate,daysToCollectBonus);
+                $scope.formData.dateFormat = dateFormat;
                 $scope.pay = function () {
                     $scope.formData.transactionDate = dateFilter($scope.formData.transactionDate, dateFormat);
-                    resourceFactory.loanTrxnsResource.payBonus({loanId: routeParams.id},$scope.formData, function (data) {
-                        $uibModalInstance.close(true);
-                    });
+                    if(collect){
+                        resourceFactory.loanBonusResource.collect({loanId: routeParams.id},$scope.formData, function (data) {
+                            $uibModalInstance.close(true);
+                        });
+                    } else {
+                        resourceFactory.loanBonusResource.cancel({loanId: routeParams.id},$scope.formData, function (data) {
+                            $uibModalInstance.close(true);
+                        });
+                    }
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
-
-                function addDays(startDate,numberOfDays)
-                {
-                    var returnDate = new Date(
-                                            startDate.getFullYear(),
-                                            startDate.getMonth(),
-                                            startDate.getDate()+numberOfDays,
-                                            startDate.getHours(),
-                                            startDate.getMinutes(),
-                                            startDate.getSeconds());
-                    return returnDate;
-                }
             };
-
-            scope.showExpectedBonus = function(){
-                if(!scope.loandetails.status && !scope.loanbonusconfig)
-                    return false;
-                var show = scope.loandetails.status.active || scope.loandetails.status.closedObligationsMet ||
-                    scope.loandetails.status.overpaid;
-                var periods = scope.loandetails.repaymentSchedule.periods;
-                scope.loansummary = {
-                    totalDaysInArrear: 0
-                }
-                for (let index = 0; index < periods.length; index++) {
-                    if(index == 0)
-                        continue;
-                    const element = periods[index];
-                    var dueDate = new Date(element.dueDate[0], element.dueDate[1]-1, element.dueDate[2]);
-                    var lastObligationsMetOnDate;
-                    if(element.obligationsMetOnDate){
-                        var obligationsMetOnDate = new Date(element.obligationsMetOnDate[0], element.obligationsMetOnDate[1]-1, element.obligationsMetOnDate[2]);
-                        if(obligationsMetOnDate > dueDate){
-                            console.log(lastObligationsMetOnDate, obligationsMetOnDate);
-                            if(lastObligationsMetOnDate){
-                                if(lastObligationsMetOnDate < obligationsMetOnDate){
-                                    scope.loansummary.totalDaysInArrear += datediff(dueDate,obligationsMetOnDate);
-                                    lastObligationsMetOnDate = obligationsMetOnDate;
-                                }
-                            } else {
-                                scope.loansummary.totalDaysInArrear += datediff(dueDate,obligationsMetOnDate);
-                                lastObligationsMetOnDate = obligationsMetOnDate;
-                            }
-                        }
-                    } else {
-                        var now = new Date();
-                        if(now > dueDate)
-                            scope.loansummary.totalDaysInArrear += datediff(dueDate,now);
-                        break;
-                    }
-                }
-                if(scope.loansummary.totalDaysInArrear < 0)
-                    scope.loansummary.totalDaysInArrear = 0;
-                return show;
-            }
-
-            scope.showExpectedBonusPayButton = function(){
-                if(!scope.loandetails.status && !scope.loanbonusconfig)
-                    return false;
-                var show = scope.loandetails.status.closedObligationsMet ||
-                    scope.loandetails.status.overpaid;
-                var daysToCollectBonus = scope.loanbonusconfig.daysToCollectBonus;
-
-                var now = new Date();
-                var closedon_date_value = scope.loandetails.timeline.closedOnDate;
-                if(closedon_date_value){
-                    var closedon_date = new Date(closedon_date_value[0],closedon_date_value[1]-1, closedon_date_value[2]);
-                    var dates_diff = datediff(closedon_date, now);
-                    if(dates_diff < daysToCollectBonus){
-                        show = show && true;
-                    } else
-                        show = show && false;
-                } else
-                    show = show && false;
-                
-                return show;
-            }
-
-            scope.showExpectedBonusPayButtonDisabled = function() {
-                for (let index = 0; index < scope.loandetails.transactions.length; index++) {
-                    const element = scope.loandetails.transactions[index];
-                    if(element.type.bonusPaid)
-                        return true;
-                }
-                return false;
-            }
-
-            function datediff(first, second) {
-                // Take the difference between the dates and divide by milliseconds per day.
-                // Round to nearest whole number to deal with DST.
-                return Math.round((second-first)/(1000*60*60*24));
-            }
 
             resourceFactory.LoanAccountResource.getLoanAccountDetails({loanId: routeParams.id, associations: 'all',exclude: 'guarantors,futureSchedule'}, function (data) {
                 scope.loandetails = data;
-                loadConfig(scope.loandetails.loanProductId);
+                loadLoanBonusData(scope.loandetails.id);
                 scope.convertDateArrayToObject('date');
                 scope.recalculateInterest = data.recalculateInterest || true;
                 scope.isWaived = scope.loandetails.repaymentSchedule.totalWaived > 0;
