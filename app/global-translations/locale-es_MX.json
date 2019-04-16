@@ -4054,8 +4054,6 @@
 	"label.cantbegreaterthan": "No debe ser mayor que",
 	"label.configurationssaved": "Se guardaron los cambios!",
 	"label.heading.totaldaysinarrear": "Días en mora",
-	"label.heading.interestPaid": "Interés pagado",
-	"label.heading.taxsummary": "Resumen de impuestos",
 	"label.heading.taxesoninterest": "Impuestos sobre interés",
 	"label.heading.taxes": "Impuestos",
 	"label.selecttaxgroup": "Seleccione grupo de impuestos",
@@ -4076,5 +4074,6 @@
 	"label.button.cancelloanbonus": "Cancelar bono",
 	"warning.loan.bonus.exceedLimitDaysToCollectBonus": "Excede limite de días para cobrar el bono (hoy)",
 	"error.msg.loan.bonus.transactiondate.exceeddaysallowed": "La bonificación no puede ser reclamada en esta fecha, excede límite",
-	"error.msg.loan.bonus.transactiondate.invalid": "No puede ser antes de la fecha de cierre del préstamo"
+	"error.msg.loan.bonus.transactiondate.invalid": "No puede ser antes de la fecha de cierre del préstamo",
+	"warning.loan.bonus.exceedDaysOnArrear": "Excede días de atraso permitidos"
 }

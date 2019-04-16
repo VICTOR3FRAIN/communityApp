@@ -4071,6 +4071,23 @@
 	"label.heading.taxsummary": "Resumen de impuestos",
 	"label.heading.taxesoninterest": "Impuestos sobre interés",
 	"label.heading.taxes": "Impuestos",
-	"label.selecttaxgroup": "Seleccione grupo de impuestos"
+	"label.selecttaxgroup": "Seleccione grupo de impuestos",
+	"label.heading.loanbonus": "Bono de préstamo",
+	"label.heading.daysInArrear": "Días de atraso",
+	"label.heading.daysInArrearAllowed": "Días de atraso allowed",
+	"label.heading.daysToCollectLoanBonus": "Días para reclamar bono",
+	"label.heading.loanbonuscycleapplied": "Ciclo aplicado para el bono",
+	"label.heading.loanbonuscycleappliedoninterest": "% sobre interés",
+	"label.heading.expectedloanbonus": "Bono esperado",
+	"label.heading.loanbonusiscollectable": "Reclamable",
+	"label.heading.loanbonusreason": "Comentarios",
+	"label.label.loanbonuscollected": "El Bono ya ha sido reclamado",
+	"label.label.loanbonuscanceled": "El pago del bono fue cancelado",
+	"label.button.collectloanbonus": "Reclamar bono",
+	"label.button.cancelloanbonus": "Cancelar bono",
+	"warning.loan.bonus.exceedLimitDaysToCollectBonus": "Excede límite de días para reclamar bono",
+	"error.msg.loan.bonus.transactiondate.exceeddaysallowed": "No se puede reclamar el bono en esta fecha, excede el número de días permitido",
+	"error.msg.loan.bonus.transactiondate.invalid": "Fecha no puede ser antes que el préstamo fue cerrado",
+	"warning.loan.bonus.exceedDaysOnArrear": "Excede días de atraso permitidos"
 
 }

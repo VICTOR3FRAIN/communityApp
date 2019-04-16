@@ -4349,5 +4349,6 @@
   "label.button.cancelloanbonus": "Cancel bonus",
   "warning.loan.bonus.exceedLimitDaysToCollectBonus": "Exceeds limit of days to collect bonus (today)",
   "error.msg.loan.bonus.transactiondate.exceeddaysallowed": "Bonus can't be claimed for this transaction date, it exceeds the amount of days allowed to collect the bonus",
-  "error.msg.loan.bonus.transactiondate.invalid": "Transaction date can't be before loan was closed"
+  "error.msg.loan.bonus.transactiondate.invalid": "Transaction date can't be before loan was closed",
+  "warning.loan.bonus.exceedDaysOnArrear": "Exceeds days on arrear"
 }

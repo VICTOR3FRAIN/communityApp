@@ -441,8 +441,6 @@
 
                 //
 
-                this.formData.estado = "Prueba";
-
                 resourceFactory.clientResource.save(this.formData, function (data) {
                     location.path('/viewclient/' + data.clientId);
                 });
