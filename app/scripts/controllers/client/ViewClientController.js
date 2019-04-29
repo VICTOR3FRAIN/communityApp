@@ -30,37 +30,25 @@
                 {
 
                     resourceFactory.addressFieldConfiguration.get({entity:entityname},function(data){
-
-
                         for(var i=0;i<data.length;i++)
                         {
                             data[i].field='scope.view.'+data[i].field;
                             eval(data[i].field+"="+data[i].is_enabled);
 
                         }
-
-
                     })
 
 
                     resourceFactory.clientAddress.get({clientId:routeParams.id},function(data)
                     {
-
                         scope.addresses=data;
-
-
                     })
-
-
                 }
 
 
                /* resourceFactory.getAllFamilyMembers.get({clientId:routeParams.id},function(data)
                 {
-
                     scope.families=data;
-
-
                 })*/
 
             });
@@ -580,6 +568,7 @@
                 scope.clientNotes = data;
             });
             scope.getClientIdentityDocuments = function () {
+                scope.preview =  false;
                 resourceFactory.clientResource.getAllClientDocuments({clientId: routeParams.id, anotherresource: 'identifiers'}, function (data) {
                     scope.identitydocuments = data;
                     for (var i = 0; i < scope.identitydocuments.length; i++) {
@@ -591,8 +580,17 @@
                                         var loandocs = {};
                                         loandocs = API_VERSION + '/' + data[l].parentEntityType + '/' + data[l].parentEntityId + '/documents/' + data[l].id + '/attachment?tenantIdentifier=' + $rootScope.tenantIdentifier;
                                         data[l].docUrl = loandocs;
+
+                                        if (data[l].fileName)
+                                        if (data[l].fileName.toLowerCase().indexOf('.jpg') != -1 || data[l].fileName.toLowerCase().indexOf('.jpeg') != -1 || data[l].fileName.toLowerCase().indexOf('.png') != -1)
+                                            data[l].fileIsImage = true;
+                                        if (data[l].type)
+                                            if (data[l].type.toLowerCase().indexOf('image') != -1)
+                                                data[l].fileIsImage = true;
+
                                     }
                                     scope.identitydocuments[j].documents = data;
+                                    
                                 }
                             }
                         });
@@ -650,6 +648,7 @@
             };
 
             scope.getClientDocuments = function () {
+                scope.preview =  false;
                 resourceFactory.clientDocumentsResource.getAllClientDocuments({clientId: routeParams.id}, function (data) {
                     for (var l in data) {
 
@@ -668,6 +667,7 @@
             };
 
             scope.deleteDocument = function (documentId, index) {
+                scope.preview= false;
                 resourceFactory.clientDocumentsResource.delete({clientId: routeParams.id, documentId: documentId}, '', function (data) {
                     scope.clientdocuments.splice(index, 1);
                 });
@@ -801,6 +801,7 @@
             };
 
             scope.deleteClientIdentifierDocument = function (clientId, entityId, index) {
+                scope.preview = false;
                 resourceFactory.clientIdenfierResource.delete({clientId: clientId, id: entityId}, '', function (data) {
                     scope.identitydocuments.splice(index, 1);
                 });
