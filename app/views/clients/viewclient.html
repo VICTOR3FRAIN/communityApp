@@ -676,15 +676,18 @@
 							<tr class="graybg">
 								<th class="graybg"> {{address.addressType}}</th>
 								<td>
-									<button ng-click="ChangeAddressStatus(address.client_id,address.isActive,address.addressId)" data-ng-hide="address.isActive" class="btn btn-primary">
-										{{"label.button.enable" | translate}}
-									</button>
-									<button ng-click="ChangeAddressStatus(address.client_id,address.isActive,address.addressId)"  data-ng-show="address.isActive" class="btn btn-primary">
-										{{"label.button.disable" | translate}}
-									</button>
-									<button class="btn btn-primary pull-right" ng-click="routeToEdit(address.addressTypeId,address.addressId)"><i class="icon-plus icon-white"></i>{{'label.button.edit' | translate}}</button>
+									<div class="row">
+										<div class="col-md-offset-8 col-md-4">
+											<button ng-click="ChangeAddressStatus(address.client_id,address.isActive,address.addressId)" data-ng-hide="address.isActive" class="btn btn-primary">
+												{{"label.button.enable" | translate}}
+											</button>
+											<button ng-click="ChangeAddressStatus(address.client_id,address.isActive,address.addressId)"  data-ng-show="address.isActive" class="btn btn-primary">
+												{{"label.button.disable" | translate}}
+											</button>
+											<button class="btn btn-primary" ng-click="routeToEdit(address.addressTypeId,address.addressId)"><i class="icon-plus icon-white"></i> {{'label.button.edit' | translate}}</button>
+										</div>
+									</div>
 								</td>
-
 							</tr>
 							</thead>
 							<tbody>
@@ -744,6 +747,30 @@
 									{{address.countyDistrict}}
 								</td>
 							</tr>
+							<tr ng-show="view.colonyName != ''">
+								<th>
+									{{ 'label.input.colony' | translate }}
+								</th>
+								<td>
+									{{address.colonyName}}
+								</td>
+							</tr>
+							<tr ng-show="view.localityName != ''">
+								<th>
+									{{ 'label.input.locality' | translate }}
+								</th>
+								<td>
+									{{address.localityName}}
+								</td>
+							</tr>
+							<tr ng-show="view.municipalityName != ''">
+								<th>
+									{{ 'label.input.municipality' | translate }}
+								</th>
+								<td>
+									{{address.municipalityName}}
+								</td>
+							</tr>
 							<tr ng-show="view.stateProvinceId">
 								<th>
 									{{ 'label.input.state_province' | translate }}
@@ -790,7 +817,7 @@
 									{{'label.input.is_active' | translate}}
 								</th>
 								<td>
-									{{address.isActive}}
+									<span class="fa fa-{{ address.isActive ? 'check' : 'times'}}"></span>
 								</td>
 							</tr>
 							</tbody>
@@ -821,7 +848,6 @@
 							</thead>
 
 							<tbody>
-
 							<tr >
 								<th >
 									{{'label.input.firstname' | translate }}
@@ -830,7 +856,6 @@
 									{{family.firstName}}
 								</td>
 							</tr>
-
                             <tr >
                                 <th >
                                     {{'label.input.middlename' | translate }}
@@ -839,8 +864,6 @@
                                     {{family.middleName}}
                                 </td>
                             </tr>
-
-
                             <tr >
                                 <th >
                                     {{'label.input.lastname' | translate }}
@@ -849,9 +872,6 @@
                                     {{family.lastName}}
                                 </td>
                             </tr>
-
-
-
                             <tr >
                                 <th >
                                     {{'label.input.qualification' | translate }}
@@ -860,9 +880,6 @@
                                     {{family.qualification}}
                                 </td>
                             </tr>
-
-
-
                             <tr >
                                 <th >
                                     {{'label.input.mobileNumber' | translate }}
@@ -871,8 +888,6 @@
                                     {{family.mobileNumber}}
                                 </td>
                             </tr>
-
-
                             <tr >
                                 <th >
                                     {{'label.input.age' | translate }}
@@ -881,7 +896,6 @@
                                     {{family.age}}
                                 </td>
                             </tr>
-
                             <tr >
                                 <th >
                                     {{'label.input.isDependent' | translate }}
@@ -890,9 +904,6 @@
                                     {{family.isDependent}}
                                 </td>
                             </tr>
-
-
-
                             <tr >
                                 <th >
                                     {{'label.input.maritalstatus' | translate }}
@@ -901,9 +912,6 @@
                                     {{family.maritalStatus}}
                                 </td>
                             </tr>
-
-
-
                             <tr >
                                 <th >
                                     {{'label.input.gender' | translate }}
@@ -912,7 +920,6 @@
                                     {{family.gender}}
                                 </td>
                             </tr>
-
                             <tr >
                                 <th >
                                     {{'label.input.profession' | translate }}
@@ -921,9 +928,6 @@
                                     {{family.profession}}
                                 </td>
                             </tr>
-
-
-
 							<tr >
 								<th >
 									{{'label.input.dateofbirth' | translate }}
@@ -932,11 +936,7 @@
 									{{family.dateOfBirth | DateFormat }}
 								</td>
 							</tr>
-
 							</tbody>
-
-
-
 						</table>
 
 					</div>
@@ -947,11 +947,13 @@
 
 				<uib-tab heading="{{'label.heading.identities' | translate}}" select="getClientIdentityDocuments()"
 						 has-permission='READ_CLIENTIDENTIFIER'>
-					<div class="pull-right btn-group">
-						<a href="#/addclientidentifier/{{client.id}}" class="btn btn-primary"
-						   has-permission='CREATE_CLIENTIDENTIFIER'><i class="fa fa-plus "></i>{{
-							'label.button.add' | translate }}</a>
-					</div>
+					<div class="row">
+						<div class="pull-right btn-group">
+							<a href="#/addclientidentifier/{{client.id}}" class="btn btn-primary"
+							has-permission='CREATE_CLIENTIDENTIFIER'><i class="fa fa-plus "></i>{{
+								'label.button.add' | translate }}</a>
+						</div>
+					</div>					
 					<br>
 					<table class="table" ng-show="identitydocuments.length > 0">
 						<thead>
@@ -971,7 +973,8 @@
 							<td>{{document.documentType.name}}</td>
 							<td>
 		                  <span ng-repeat="file in document.documents">
-		                    {{file.fileName}}&nbsp;&nbsp;
+							{{file.fileName}}&nbsp;&nbsp;
+							<a ng-show="file.fileIsImage" ng-click="previewDocument(file.docUrl,file.fileName)"><i class="fa fa-eye"></i></a>
 		                    <a target="_blank" href="{{hostUrl}}{{file.docUrl}}" has-permission='READ_DOCUMENT'><i
 									class="fa fa-cloud-download"></i></a>
 		                  </span>
@@ -990,13 +993,19 @@
 						</tr>
 						</tbody>
 					</table>
+					<div style="padding-left: 25%;">
+						<object height="60%" width="70%" ng-show="preview" data="{{ fileUrl }}" type="{{ fileType }}"></object>
+					</div>
 				</uib-tab>
 				<uib-tab heading="{{'label.heading.documents' | translate}}" select="getClientDocuments()" has-permission='READ_DOCUMENT'>
-					<div class="pull-right">
-						<a href="#/addclientdocument/{{client.id}}" class="btn btn-primary" has-permission='CREATE_DOCUMENT'><i
-								class="fa fa-plus "></i>
-							{{'label.button.upload' | translate}}</a>
+					<div class="row">
+						<div class="pull-right">
+								<a href="#/addclientdocument/{{client.id}}" class="btn btn-primary" has-permission='CREATE_DOCUMENT'><i
+										class="fa fa-plus "></i>
+									{{'label.button.upload' | translate}}</a>
+						</div>
 					</div>
+					
 					<br>
 					<table class="table" ng-show="clientdocuments.length > 0">
 						<thead>
@@ -1014,14 +1023,14 @@
 							<td>{{clientdocument.fileName}}</td>
 							<td>
 								<a target="_blank" href="{{hostUrl}}{{clientdocument.docUrl}}"><i class="fa fa-cloud-download"></i></a>&nbsp;
-								<a ng-show="clientdocument.fileIsImage" ng-click="previewDocument(clientdocument.docUrl,clientdocument.fileName)"><i class="fa fa-eye"></i></a>
+								<a ng-show="clientdocument.fileIsImage || clientdocument.fileIsPdf" ng-click="previewDocument(clientdocument.docUrl,clientdocument.fileName)"><i class="fa fa-eye"></i></a>
 								<a ng-click="deleteDocument(clientdocument.id,$index)"><i class="fa fa-times"></i></a>
 							</td>
 						</tr>
 						</tbody>
 					</table>
 					<div style="padding-left: 25%;">
-					  <object height="60%" width="70%" ng-show="preview" data="{{fileUrl}}" type="{{fileType}}"></object>
+					  <object height="60%" width="70%" ng-show="preview" data="{{ fileUrl }}" type="{{ fileType }}"></object>
 				  </div>
 				</uib-tab>
 				<uib-tab heading="{{clientdatatable.registeredTableName}}" ng-repeat="clientdatatable in clientdatatables"

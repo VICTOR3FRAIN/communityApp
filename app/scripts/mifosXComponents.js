@@ -297,7 +297,6 @@ define(['Q', 'underscore', 'mifosX'], function (Q) {
             'organization/smscampaigns/EditSmsCampaignController',
             'organization/entitydatatablechecks/EntityDatatableChecksController',
             'notification/NotificationsController',
-            'notification/NotificationsController',
             'configurations/AddressFormController',
             'client/EditFamilyMemberController',
             'client/AddFamilyMembersController',
