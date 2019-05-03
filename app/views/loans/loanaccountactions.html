@@ -257,7 +257,7 @@
             <div class="form-group" ng-show="showBankAccount">
                 <label class="control-label col-sm-2" for="bank_account">{{'label.heading.catalogue.banks.bank_account' | translate}}</label>
                 <div class="col-sm-3">
-                    <input id="bank_account" type="text" ng-model="formData.bankAccountGL" required
+                    <input id="bank_account" type="text" ng-model="formData.bankAccountGL" required  autocomplete="off"
                     placeholder="{{'label.input.bank_account_name' | translate}}" class="form-control" typeahead-on-select="selectBankAccount()"
                     uib-typeahead="account as account.autocompleteLabel for account in bankAccounts | filter:$viewValue | limitTo:8"/>
                 </div>

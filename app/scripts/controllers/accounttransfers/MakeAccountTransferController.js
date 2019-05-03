@@ -13,11 +13,27 @@
             scope.toAccountTypes = [];
             scope.toAccounts = [];
 
+            var loadBankAccountsRepayments = function(){
+                scope.showBankAccount = true;
+                resourceFactory.banksAccountsResource.getRepaymentsAccounts(function (data) {
+                    scope.bankAccounts = data;
+                    scope.bankAccounts.forEach(element => {
+                        element.autocompleteLabel = element.externalCode + " " + element.name;
+                    });
+                });
+            }
+
+            scope.selectBankAccount = function(){
+                scope.formData.bankAccountGLId = scope.formData.bankAccountGL.glAccount.id;
+                scope.formData.bankAccountGL = scope.formData.bankAccountGL.name;
+            }
+
             scope.back = function () {
                 window.history.back();
             };
 
             scope.formData = {fromAccountId: params.fromAccountId, fromAccountType: params.fromAccountType};
+            loadBankAccountsRepayments();
             resourceFactory.accountTransfersTemplateResource.get(params, function (data) {
                 scope.transfer = data;
                 scope.toOffices = data.toOfficeOptions;

@@ -72,6 +72,18 @@
                             </select>
                             <form-validate valattributeform="accounttransferform" valattribute="account"/>
                         </div>
+
+                        <div ng-show="formData.toAccountType === 1">
+                            <label class="control-label col-sm-2" for="bank_account">{{'label.heading.catalogue.banks.bank_account' | translate}}</label>
+                            <div class="col-sm-3">
+                                <input id="bank_account" type="text" ng-model="formData.bankAccountGL" autocomplete="off"
+                                placeholder="{{'label.input.bank_account_name' | translate}}" class="form-control" typeahead-on-select="selectBankAccount()"
+                                uib-typeahead="account as account.autocompleteLabel for account in bankAccounts | filter:$viewValue | limitTo:8"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <form-validate valattributeform="loanactionform" valattribute="bankAccountGL"/>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-2" for="toAccountId">{{ 'label.input.account' | translate }}<span
