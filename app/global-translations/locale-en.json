@@ -4333,5 +4333,22 @@
 	"label.heading.taxes": "Taxes",
 	"label.selecttaxgroup": "Select Tax Group",
   "label.heading.interestPaid": "Interest Paid",
-  "label.heading.taxsummary": "Tax Summary"
+  "label.heading.taxsummary": "Tax Summary",
+  "label.heading.loanbonus": "Loan bonus",
+	"label.heading.daysInArrear": "Days in arrear",
+	"label.heading.daysInArrearAllowed": "Days in arrear allowed",
+	"label.heading.daysToCollectLoanBonus": "Days to collect loan bonus",
+	"label.heading.loanbonuscycleapplied": "Cycle applied to loan bonus",
+	"label.heading.loanbonuscycleappliedoninterest": "% on interest",
+	"label.heading.expectedloanbonus": "Expected bonus",
+	"label.heading.loanbonusiscollectable": "Claimable",
+	"label.heading.loanbonusreason": "Comments",
+	"label.label.loanbonuscollected": "The bonus was already claimed",
+	"label.label.loanbonuscanceled": "The bonus was canceled",
+	"label.button.collectloanbonus": "Claim bonus",
+  "label.button.cancelloanbonus": "Cancel bonus",
+  "warning.loan.bonus.exceedLimitDaysToCollectBonus": "Exceeds limit of days to collect bonus (today)",
+  "error.msg.loan.bonus.transactiondate.exceeddaysallowed": "Bonus can't be claimed for this transaction date, it exceeds the amount of days allowed to collect the bonus",
+  "error.msg.loan.bonus.transactiondate.invalid": "Transaction date can't be before loan was closed",
+  "warning.loan.bonus.exceedDaysOnArrear": "Exceeds days on arrear"
 }

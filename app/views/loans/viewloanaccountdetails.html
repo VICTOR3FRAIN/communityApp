@@ -124,10 +124,10 @@
                     <b>{{'label.heading.arrearsby' | translate}}: <span class="padded-td">{{loandetails.summary.totalOverdue | number}}<span
                                     data-ng-hide="loandetails.summary.totalOverdue>=0">{{'label.heading.notprovided' | translate}}</span></span></b>
                         <br>
-                        <b>{{'label.heading.totaldaysinarrear' | translate}}: <span class="padded-td">{{loansummary.totalDaysInArrear | number}}</span> {{'label.days' | translate}}</b>
-                    <br>
+
+                        <b ng-show="loanbonusdata.daysInArrear">{{'label.heading.totaldaysinarrear' | translate}}: <span class="padded-td">{{loanbonusdata.daysInArrear | number}}</span> {{'label.days' | translate}}</b>
                         <br>
-                        <b><span ng-if="showExpectedBonus()">{{'label.expectedbonus' | translate}}: {{loandetails.currency.displaySymbol}} {{calculateLoanExpectedBonus() | number}}</span> <button ng-if="showExpectedBonusPayButton()" ng-click="openDialog($event)" ng-disabled="showExpectedBonusPayButtonDisabled()" class="btn btn-small btn-danger">{{'label.button.pay' | translate}}</button></b>
+                        <b ng-show="loanbonusdata.expectedBonusAmount"><span>{{'label.expectedbonus' | translate}}: {{loandetails.currency.displaySymbol}} {{loanbonusdata.expectedBonusAmount | number}}</span></b>
                     <!--<b>{{'label.heading.amountDue' | translate}}(as of dd/mm/yyyy): <span class="padded-td">{{'label.heading.notprovided' | translate}}</span></b>-->
                     </div>
                     <br>
@@ -525,6 +525,7 @@
                                 <th scope="col">{{'label.heading.balanceofloan' | translate}}</th>
 
                                 <th scope="col">{{'label.heading.interest' | translate}}</th>
+                                <th scope="col">{{'label.heading.taxes' | translate}}</th>
                                 <th scope="col">{{'label.heading.fees' | translate}}</th>
                                 <th scope="col">{{'label.heading.penalties' | translate}}</th>
 
@@ -548,7 +549,8 @@
 
                                 <td>{{period.principalDue | number}}</td>
                                 <td>{{period.principalLoanBalanceOutstanding | number}}</td>
-                                <td>{{(period.interestOriginalDue + period.taxOnInterestDue) | number}}</td>
+                                <td>{{period.interestOriginalDue | number}}</td>
+                                <td>{{period.taxOnInterestDue | number}}</td>
                                 <td>{{period.feeChargesDue | number}}</td>
                                 <td>{{period.penaltyChargesDue | number}}</td>
 
@@ -568,7 +570,8 @@
 
                                 <th>{{loandetails.repaymentSchedule.totalPrincipalExpected | number}}</th>
                                 <th>&nbsp;</th>
-                                <th>{{(loandetails.repaymentSchedule.totalInterestCharged  + loandetails.repaymentSchedule.totalTaxes) | number}}</th>
+                                <th>{{loandetails.repaymentSchedule.totalInterestCharged | number}}</th>
+                                <th>{{loandetails.repaymentSchedule.totalTaxes | number}}</th>
                                 <th>{{loandetails.repaymentSchedule.totalFeeChargesCharged | number}}</th>
                                 <th>{{loandetails.repaymentSchedule.totalPenaltyChargesCharged | number}}</th>
 
@@ -656,6 +659,7 @@
                                     <th scope="col">&nbsp;</th>
                                     <th class="pointer" scope="col" ng-click="changeTransactionSort('principalPortion')">{{'label.heading.principal' | translate}}</th>
                                     <th class="pointer" scope="col" ng-click="changeTransactionSort('interestPortion')">{{'label.heading.interest' | translate}}</th>
+                                    <th class="pointer" scope="col" ng-click="changeTransactionSort('taxOnInterestPortion')">{{'label.heading.taxes' | translate}}</th>
                                     <th class="pointer" scope="col" ng-click="changeTransactionSort('feeChargesPortion')">{{'label.heading.fees' | translate}}</th>
                                     <th class="pointer" scope="col" ng-click="changeTransactionSort('penaltyChargesPortion')">{{'label.heading.penalities' | translate}}</th>
                                 </tr>
@@ -683,6 +687,9 @@
                                     </td>
                                     <td class="pointer" data-ng-click="routeTo(loandetails.id,transaction.id,transaction.type.id)">
                                         {{transaction.interestPortion | number}}
+                                    </td>
+                                    <td class="pointer" data-ng-click="routeTo(loandetails.id,transaction.id,transaction.type.id)">
+                                        {{transaction.taxOnInterestPortion | number}}
                                     </td>
                                     <td class="pointer" data-ng-click="routeTo(loandetails.id,transaction.id,transaction.type.id)">
                                         {{transaction.feeChargesPortion | number}}
@@ -871,52 +878,113 @@
                         </table>
                     </uib-tab>
 
-                    <uib-tab ng-show="loandetails.taxes && loandetails.taxes.length" heading="{{'label.heading.taxes' | translate}}">
-                        <table class="table table-striped .width100">
-                            <colgroup span="4"></colgroup>
-                            <thead>
-                            <tr>
-                                <th colspan="1" scope="colgroup"></th>
-                                <th colspan="{{loandetails.taxes.length}}" scope="colgroup">{{"label.heading.taxsummary" | translate}}</th>
-                            </tr>
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                    <uib-tab ng-show="loanbonusdata && loandetails.status.id === 600" heading="{{'label.heading.loanbonus' | translate}}">
+                            <table class="table table-striped">
+                                <thead>
                                 <tr>
-                                    <td>{{"label.heading.interest" | translate}}</td>
-                                    <td ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.percentage}}</td>
+                                    <th class="empty"></th>
+                                    <th class="empty"></th>
                                 </tr>
-                            </tbody>
-                        </table>
-                        <h3><strong>{{"label.heading.taxesoninterest" | translate}} <a ng-click="showTaxOnInterestTable = !showTaxOnInterestTable"><i class="fa fa-eye" ng-hide="showTaxOnInterestTable" title="Display"></i><i ng-show="showTaxOnInterestTable" class="fa fa-eye-slash" title="Display"></i></a></strong></h3>
-                        <hr>
-                        <table class="table table-striped .width100" ng-show="showTaxOnInterestTable">
-                            <colgroup span="4"></colgroup>
-                            <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">{{"label.heading.interest" | translate}}</th>
-                                <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
-                                <th scope="col">{{"label.heading.interestPaid" | translate}}</th>
-                                <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
-                                <th scope="col">{{"label.heading.total" | translate}}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="period in loandetails.repaymentSchedule.periods | limitTo: (1 - loandetails.repaymentSchedule.periods.length)" >
-                                    <td scope="row">{{period.period}}</td>
-                                    <td>{{(period.interestOriginalDue + period.taxOnInterestDue) | number}}</td>
-                                    <td ng-repeat="tax in loandetails.taxes">{{period.interestOriginalDue * (tax.loanProductTaxComponent.percentage/100) | number}}</td>
-                                    <td>{{(period.interestPaid + period.taxOnInterestPaid) | number}}</td>
-                                    <td ng-repeat="tax in loandetails.taxes">{{period.interestPaid * (tax.loanProductTaxComponent.percentage/100) | number}}</td>
-                                    <td>{{period.taxOnInterestPaid | number}}</td>
+                                </thead>
+                                <tbody>
+                                <tr ng-class="loanbonusdata.daysInArrear > loanbonusdata.daysInArrearAllowed ? 'text-danger':'text-success'">
+                                    <td>{{'label.heading.daysInArrear' |
+                                        translate}}
+                                    </td>
+                                    <td><span class="padded-td">{{loanbonusdata.daysInArrear}}</span></td>
                                 </tr>
-                            </tbody>
-                        </table>
+                                <tr>
+                                    <td>{{'label.heading.daysInArrearAllowed' | translate}}</td>
+                                    <td><span class="padded-td">{{loanbonusdata.daysInArrearAllowed}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{'label.heading.daysToCollectLoanBonus' | translate}}</td>
+                                    <td><span class="padded-td">{{loanbonusdata.daysToCollectBonus}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{'label.heading.loanbonuscycleapplied' | translate}}</td>
+                                    <td><span class="padded-td">{{loanbonusdata.loanBonusCycleApplied.percentValue}}{{'label.heading.loanbonuscycleappliedoninterest' | translate}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{'label.heading.expectedloanbonus' | translate}}</td>
+                                    <td><span class="padded-td">{{loandetails.currency.displaySymbol}} {{loanbonusdata.expectedBonusAmount | number}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{'label.heading.loanbonusiscollectable' | translate}}</td>
+                                    <td><span class="padded-td">
+                                        <i ng-show="loanbonusdata.isCollectable" class="fa fa-check fa-2x text-success"></i>
+                                        <i ng-hide="loanbonusdata.isCollectable" class="fa fa-ban fa-2x text-danger"></i>
+                                    </span>
+                                    </td>
+                                </tr>
+                                <tr ng-class="loanbonusdata.reason.startsWith('warning') ? text-warning:text-info">
+                                    <td>{{'label.heading.loanbonusreason' | translate}}</td>
+                                    <td ><span class="padded-td">{{loanbonusdata.reason | translate}}</span>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <div class="text-center" ng-hide="loanbonusdata.collected || loanbonusdata.canceled">
+                                <button class="btn" ng-click="collectLoanBonus()" ng-class="loanbonusdata.isCollectable ? 'btn-success':'btn-danger'">{{'label.button.collectloanbonus' | translate}}</button>
+                                <button class="btn btn-default" ng-click="cancelLoanBonus()">{{'label.button.cancelloanbonus' | translate}}</button>
+                            </div>
+                            <div class="text-center">
+                                <label class="text-success" ng-show="loanbonusdata.collected">{{'label.label.loanbonuscollected' | translate}}</label>
+                                <label class="text-danger" ng-show="loanbonusdata.canceled">{{'label.label.loanbonuscanceled' | translate}}</label>
+                            </div>
                     </uib-tab>    
+
+                    <uib-tab ng-show="loandetails.taxes && loandetails.taxes.length" heading="{{'label.heading.taxes' | translate}}">
+                            <table class="table table-striped .width100">
+                                <colgroup span="4"></colgroup>
+                                <thead>
+                                <tr>
+                                    <th colspan="1" scope="colgroup"></th>
+                                    <th colspan="{{loandetails.taxes.length}}" scope="colgroup">{{"label.heading.taxsummary" | translate}}</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{"label.heading.interest" | translate}}</td>
+                                        <td ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.percentage}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <h3><strong>{{"label.heading.taxesoninterest" | translate}} <a ng-click="showTaxOnInterestTable = !showTaxOnInterestTable"><i class="fa fa-eye" ng-hide="showTaxOnInterestTable" title="Display"></i><i ng-show="showTaxOnInterestTable" class="fa fa-eye-slash" title="Display"></i></a></strong></h3>
+                            <hr>
+                            <table class="table table-striped .width100" ng-show="showTaxOnInterestTable">
+                                <colgroup span="4"></colgroup>
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">{{"label.heading.interest" | translate}}</th>
+                                    <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
+                                    <th scope="col">{{"label.heading.interestPaid" | translate}}</th>
+                                    <th scope="col" ng-repeat="tax in loandetails.taxes">{{tax.loanProductTaxComponent.taxComponent.name}}</th>
+                                    <th scope="col">{{"label.heading.total" | translate}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="period in loandetails.repaymentSchedule.periods | limitTo: (1 - loandetails.repaymentSchedule.periods.length)" >
+                                        <td scope="row">{{period.period}}</td>
+                                        <td>{{(period.interestOriginalDue + period.taxOnInterestDue) | number}}</td>
+                                        <td ng-repeat="tax in loandetails.taxes">{{period.interestOriginalDue * (tax.loanProductTaxComponent.percentage/100) | number}}</td>
+                                        <td>{{(period.interestPaid + period.taxOnInterestPaid) | number}}</td>
+                                        <td ng-repeat="tax in loandetails.taxes">{{period.interestPaid * (tax.loanProductTaxComponent.percentage/100) | number}}</td>
+                                        <td>{{period.taxOnInterestPaid | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </uib-tab>
 
                     <uib-tab heading="{{'label.heading.loandocuments' | translate}}" select="getLoanDocuments()">
                         <div class="pull-right" data-ng-show="choice">
