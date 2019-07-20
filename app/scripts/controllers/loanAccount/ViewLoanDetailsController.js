@@ -121,6 +121,26 @@
                     case "foreclosure":
                         location.path('loanforeclosure/' + accountId);
                         break;
+                    case "tarjetaROP":
+                        var reportURL = $rootScope.hostUrl + API_VERSION + "/runreports/Tarjeton de Referencias";
+                        reportURL += "?output-type=PDF&tenantIdentifier=" + $rootScope.tenantIdentifier + "&locale=" + scope.optlang.code + "&dateFormat=" + scope.df;
+
+                        var inQueryParameters = "&selected_name="+ scope.loandetails.clientId +"&selected_product="+ scope.loandetails.id +"";
+                        reportURL += inQueryParameters;
+                        // Allow untrusted urls for the ajax request.
+                        // http://docs.angularjs.org/error/$sce/insecurl
+                        reportURL = $sce.trustAsResourceUrl(reportURL);
+                        reportURL = $sce.valueOf(reportURL);
+                        http.get(reportURL, {responseType: 'arraybuffer'}).
+                        success(function(data, status, headers, config) {
+                            var contentType = headers('Content-Type');
+                            var file = new Blob([data], {type: contentType});
+                            var fileContent = URL.createObjectURL(file);
+
+                            // Pass the form data to the iframe as a data url.
+                            scope.baseURL = $sce.trustAsResourceUrl(fileContent);
+                        });
+                        break;
                 }
             };
 
@@ -149,8 +169,68 @@
                 };
             };
 
+            var loadLoanBonusData = function (loanId) {
+                resourceFactory.loanBonusResource.get({loanId: loanId},function (data) {
+                    scope.loanbonusdata = data;
+                });   
+            }
+
+            scope.collectLoanBonus = function(ev) {
+                openBonusDialog(true);
+            }
+
+            function openBonusDialog(collect) {
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'payBonus.html',
+                    controller: PayBonusCtrl,
+                    resolve: {
+                        resourceFactory: function(){
+                            return resourceFactory;
+                        },
+                        collect: function(){
+                            return collect;
+                        },
+                        dateFormat: function(){
+                            return scope.df;
+                        },
+                        locale:function(){
+                            return scope.optlang.code;
+                        }
+                    }
+                });
+                modalInstance.result.then(function() {
+                    loadLoanBonusData(scope.loandetails.id);
+                });
+            }
+
+            scope.cancelLoanBonus = function(ev) {
+                openBonusDialog(false);
+            }
+
+            var PayBonusCtrl = function ($scope, $uibModalInstance, resourceFactory, collect, dateFormat, locale) {
+                $scope.formData = {};
+                $scope.formData.locale = locale;
+                $scope.formData.dateFormat = dateFormat;
+                $scope.pay = function () {
+                    $scope.formData.transactionDate = dateFilter($scope.formData.transactionDate, dateFormat);
+                    if(collect){
+                        resourceFactory.loanBonusResource.collect({loanId: routeParams.id},$scope.formData, function (data) {
+                            $uibModalInstance.close(true);
+                        });
+                    } else {
+                        resourceFactory.loanBonusResource.cancel({loanId: routeParams.id},$scope.formData, function (data) {
+                            $uibModalInstance.close(true);
+                        });
+                    }
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+            };
+
             resourceFactory.LoanAccountResource.getLoanAccountDetails({loanId: routeParams.id, associations: 'all',exclude: 'guarantors,futureSchedule'}, function (data) {
                 scope.loandetails = data;
+                loadLoanBonusData(scope.loandetails.id);
                 scope.convertDateArrayToObject('date');
                 scope.recalculateInterest = data.recalculateInterest || true;
                 scope.isWaived = scope.loandetails.repaymentSchedule.totalWaived > 0;
@@ -346,6 +426,10 @@
                             {
                                 name: "button.recoverguarantee",
                                 taskPermissionName: 'RECOVERGUARANTEES_LOAN'
+                            },
+                            {
+                                name: "button.tarjetaROP",
+                                taskPermissionName: 'READ_REPORT'
                             }
                         ]
 

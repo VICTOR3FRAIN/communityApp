@@ -441,8 +441,6 @@
 
                 //
 
-
-
                 resourceFactory.clientResource.save(this.formData, function (data) {
                     location.path('/viewclient/' + data.clientId);
                 });

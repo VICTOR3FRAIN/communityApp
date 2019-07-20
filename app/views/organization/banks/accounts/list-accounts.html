@@ -1,0 +1,104 @@
+<div class="content-container" ng-controller="BankAccountsController">
+        <ul class="breadcrumb">
+            <li><a href="#/organization">{{'label.anchor.organization' | translate}}</a></li>
+            <li><a href="#/banks">{{'label.anchor.banks' | translate}}</a></li>
+            <li class="active">{{'label.anchor.banks.accounts' | translate}}</li>
+        </ul>
+    
+    <div class="card" id="popupContainer" >
+    <div class="content">
+        <div class="toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <input ng-autofocus="true" ng-model="filterText" type="text" class="form-control col-md-6" placeholder="{{'label.input.filterbyname' | translate}}">
+                </div>
+                <div class="col-md-6">
+                    <div class="pull-right">
+                        <button ng-click="openDialog($event)" class="btn btn-primary"><i class="fa fa-plus "></i>&nbsp;&nbsp;{{'label.button.banks.create_bank_account' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div ng-hide="isTreeView">
+            <api-validate></api-validate>
+            <table class="table">
+                <thead>
+                <tr class="graybg">
+                    <th>{{'label.heading.catalogue.banks.account.external_id' | translate}}</th>
+                    <th>{{'label.heading.catalogue.banks.account.name' | translate}}</th>
+                    <th>{{'label.heading.catalogue.banks.account.accounting_account' | translate}}</th>
+                    <th>{{'label.heading.catalogue.banks.account.use' | translate}}</th>
+                    <th>{{'label.heading.actions' | translate}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="account in accounts  | filter:filterText |  itemsPerPage: AccountsPerPage">
+                    <td>{{account.externalCode}}</td>
+                    <td>{{account.name}}</td>
+                    <td>{{account.glAccount.glCode}} {{account.glAccount.name}}</td>
+                    <td>{{account.accUse.code | translate}}</td>
+                    <td >
+                        <a data-ng-click="editBankAccount(account.glAccount.id)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" title="{{'label.heading.edit_account' | translate}}" class="fa fa-edit "></i></a>
+                        <a data-ng-click="deleteBankAccount(account.glAccount)" style="display: inline-block;vertical-align: middle"><i style="font-weight: bold" title="{{'label.heading.delete' | translate}}" class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <dir-pagination-controls boundary-links="true" template-url="bower_components/angular-utils-pagination/dirPagination.tpl.html"></dir-pagination-controls>
+        </div>
+    </div>
+    </div>
+    
+    <script type="text/ng-template" id="editaccount.html">
+        <div class="modal-header silver">
+            <h3 class="bolder" ng-if="!exists">{{'label.heading.create_account' | translate}}</h3>
+            <h3 class="bolder" ng-if="exists">{{'label.heading.edit_account' | translate}}</h3>
+        </div>
+        <div class="modal-body ">
+            <api-validate></api-validate>
+            <form ng-submit="save()" >
+                <div class="form-group">
+                    <label for="externalId">{{'label.heading.catalogue.banks.account.external_id' | translate}}</label>
+                    <input ng-model="formData.externalCode" type="text" class="form-control" id="externalId" placeholder="{{'label.heading.catalogue.banks.account.external_id' | translate}}">
+                </div>
+                <div class="form-group">
+                    <label for="bankName">{{'label.heading.catalogue.banks.account.name' | translate}}</label>
+                    <input ng-model="formData.name" type="text" class="form-control" id="bankName" required placeholder="{{'label.heading.catalogue.banks.account.name' | translate}}">
+                </div>
+                <div class="form-group">
+                    <label for="accounting_account">{{'label.heading.catalogue.banks.account.accounting_account' | translate}}</label>
+                    <input ng-disabled="exists" id="expert" type="text" ng-model="formData.glAccountGL"
+                    placeholder="{{'label.input.ledger_account' | translate}}" class="form-control" typeahead-on-select="selectGlAccount()"
+                    ng-autofocus="true" uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
+                </div>
+                <div class="form-group">
+                    <label for="use">{{'label.heading.catalogue.banks.account.use' | translate}}</label>
+                    <select class="form-control" id="use" ng-options="optionType.id as optionType.code | translate for optionType in bankOptions.bankAccountUseOptions" ng-model="formData.bankUseId">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">{{'label.heading.catalogue.banks.account.status' | translate}}</label>
+                    <select class="form-control" id="status" ng-options="optionStatus.id as optionStatus.code | translate for optionStatus in bankOptions.bankAccountStatusOptions" ng-model="formData.bankAccountStatusId">
+                    </select>
+                </div>
+                <br>
+                <button class="btn btn-default" type="button" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+                <button class="btn btn-primary" ng-if="!formData.id" type="submit">{{'label.button.save' | translate}}</button>
+                <button class="btn btn-primary" ng-if="formData.id" type="submit">{{'label.button.update' | translate}}</button>
+            </form>
+        </div>
+    </script>
+    
+    <script type="text/ng-template" id="deletetemplate.html">
+        <div class="modal-header silver">
+            <h3 class="bolder">{{'label.heading.delete' | translate}}</h3>
+        </div>
+        <div class="modal-body ">
+            <api-validate></api-validate>
+            <p>{{'label.areyousureyouwanttodeletethebankaccount' | translate}} {{account.name}}?</p>
+            <br>
+            <button class="btn btn-default" ng-click="cancel()">{{'label.button.cancel' | translate}}</button>
+            <button class="btn btn-primary" ng-click="delete()">{{'label.button.confirm' | translate}}</button>
+        </div>
+    </script>

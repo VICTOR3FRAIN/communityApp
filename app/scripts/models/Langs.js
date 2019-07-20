@@ -4,6 +4,7 @@
             { "name": "English", "code": "en" },
             { "name": "Français", "code": "fr" },
             { "name": "Español", "code": "es" },
+			{ "name": "Español Mexico", "code": "es_MX" },
             { "name": "Português", "code": "pt" },
             { "name": "中文", "code": "zh_CN" },
             { "name": "हिंदी", "code": "hi" },

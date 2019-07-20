@@ -2,6 +2,7 @@
     mifosX.controllers = _.extend(module, {
         EditLoanProductController: function (scope, resourceFactory, location, routeParams, dateFilter) {
             scope.formData = {};
+            scope.loanBonusFormData = {};
             scope.restrictDate = new Date();
             scope.charges = [];
             scope.loanProductConfigurableAttributes = [];
@@ -42,6 +43,17 @@
                         scope.overduecharges.push(scope.penaltyOptions[i]);
                     }
                 }
+                if (data.taxComponents) {
+					scope.taxComponents = data.taxComponents.map(function(x) {
+						return {
+							id: x.taxComponent.id,
+							percentage: x.percentage,
+							name: x.taxComponent.name,
+							startDate: x.taxComponent.startDate
+						};
+					});
+				}
+
                 scope.product.interestRecalculationNthDayTypeOptions.push({"code" : "onDay", "id" : -2, "value" : "on day"});
                 scope.formData = {
                     name: scope.product.name,
@@ -243,6 +255,10 @@
                 scope.formData.canUseForTopup = scope.product.canUseForTopup;
             });
 
+            resourceFactory.taxgroup.getAll(function (data) {
+				scope.taxGroups = data;
+			});
+
             scope.chargeSelected = function (chargeId) {
                 if(chargeId){
                     resourceFactory.chargeResource.get({chargeId: chargeId, template: 'true'}, this.formData, function (data) {
@@ -258,6 +274,20 @@
             scope.deleteCharge = function (index) {
                 scope.charges.splice(index, 1);
             };
+
+            scope.taxGroupSelected = function (groupId) {
+				var group = scope.taxGroups.filter(function(x) { return x.id === groupId; })[0];
+				if (group) {
+					scope.taxComponents = group.taxAssociations.map(function(x) {
+						x.taxComponent.startDate = x.startDate;
+						return x.taxComponent;
+					});
+				}
+			};
+
+			scope.deleteTaxComponent = function(index) {
+				scope.taxComponents.splice(index, 1);
+			};
 
             //advanced accounting rule
             scope.showOrHide = function (showOrHideValue) {
@@ -457,6 +487,7 @@
                 this.formData.locale = scope.optlang.code;
                 this.formData.startDate = reqFirstDate;
                 this.formData.closeDate = reqSecondDate;
+                this.formData.taxComponents = scope.taxComponents;
 
                 //Interest recalculation data
                 if (this.formData.isInterestRecalculationEnabled) {
@@ -521,8 +552,98 @@
                 }
 
                 resourceFactory.loanProductResource.put({loanProductId: routeParams.id}, this.formData, function (data) {
-                    location.path('/viewloanproduct/' + data.resourceId);
+                    if(scope.loanBonusFormData.id){
+                        resourceFactory.loanBonusConfigResource.update({configId: scope.loanBonusFormData.id}, scope.loanBonusFormData, function (data2) {
+                            location.path('/viewloanproduct/' + data.resourceId);
+                        });
+                    } else {
+                        scope.loanBonusFormData.loanProductId = routeParams.id;
+                        resourceFactory.loanBonusConfigResource.save(scope.loanBonusFormData, function (data2) {
+                            location.path('/viewloanproduct/' + data.resourceId);
+                        });
+                    }
                 });
+            }
+
+            var loadGlAccounts = function(){
+                resourceFactory.accountCoaResource.getAllAccountCoas({usage: 1}, function (data) {
+                    scope.glAccounts = data;
+                    scope.glAccounts.forEach(element => {
+                        element.autocompleteLabel = element.glCode + " " + element.name;
+                    });
+                });
+            }
+            loadGlAccounts();
+
+            var loadConfig = function () {
+                resourceFactory.loanBonusConfigResource.get({configId: routeParams.id}, function (data) {
+                    scope.loanBonusFormData = data;
+                    if(scope.loanBonusFormData.glAccountToDebit)
+                        scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
+                    if(scope.loanBonusFormData.glAccountToCredit)
+                        scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
+                });   
+            }
+            loadConfig();
+
+            scope.addCycle = function(){
+                scope.showErrorCycle = false;
+                if(this.editloanproductform.cycleToValue.$valid &&
+                    this.editloanproductform.cycleFromValue.$valid &&
+                    this.editloanproductform.cyclePercentValue.$valid 
+                    && this.newcycle.fromValue && this.newcycle.toValue && this.newcycle.percentValue){
+                    if(!scope.loanBonusFormData.cycles)
+                        scope.loanBonusFormData.cycles = [];
+                    var conflict = false;
+                    for (let index = 0; index < scope.loanBonusFormData.cycles.length; index++) {
+                        const element = scope.loanBonusFormData.cycles[index];
+                        if(this.newcycle.fromValue >= element.fromValue && this.newcycle.fromValue <= element.toValue)
+                            conflict = true;
+                        if(this.newcycle.toValue >= element.fromValue && this.newcycle.toValue <= element.toValue)
+                            conflict = true;
+                    }
+                    if(conflict){
+                        scope.showErrorCycle = true;
+                        scope.errorMsgCycle = 'label.rangealreadyincluded';
+                    }
+                    if(!conflict){
+                        scope.loanBonusFormData.cycles.push(scope.deepCopy(this.newcycle));
+                        this.newcycle = {};
+                    }
+                } else {
+                }
+            }
+
+            scope.removeCycle = function(index){
+                scope.loanBonusFormData.cycles.splice(index, 1);
+            }
+
+            scope.selectGlAccountDebit = function(){
+                scope.loanBonusFormData.glAccountToDebitId = scope.loanBonusFormData.glAccountToDebit.id;
+                scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
+            }
+
+            scope.selectGlAccountCredit = function(){
+                scope.loanBonusFormData.glAccountToCreditId = scope.loanBonusFormData.glAccountToCredit.id;
+                scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
+            }
+
+            scope.deepCopy = function (obj) {
+                if (Object.prototype.toString.call(obj) === '[object Array]') {
+                    var out = [], i = 0, len = obj.length;
+                    for (; i < len; i++) {
+                        out[i] = arguments.callee(obj[i]);
+                    }
+                    return out;
+                }
+                if (typeof obj === 'object') {
+                    var out = {}, i;
+                    for (i in obj) {
+                        out[i] = arguments.callee(obj[i]);
+                    }
+                    return out;
+                }
+                return obj;
             }
         }
     });

@@ -44,6 +44,9 @@
                     officeImportTemplateResource: defineResource(apiVer + "/offices/bulkimporttemplate", {}, {
                     		get: {method: 'GET', params: {}}
                     }),
+                    officeTemplateResource: defineResource(apiVer + "/offices/template", {}, {
+                        get: {method: 'GET', params: {}}
+                    }),
                     importResource: defineResource(apiVer + "/imports", {}, {
                 			getImports: {method: 'GET', params: {}, isArray: true}
                     }),
@@ -199,7 +202,8 @@
                         get: {method: 'GET', params: {}}
                     }),
                     loanTrxnsResource: defineResource(apiVer + "/loans/:loanId/transactions/:transactionId", {loanId: '@loanId', transactionId: '@transactionId'}, {
-                        get: {method: 'GET', params: {}}
+                        get: {method: 'GET', params: {}},
+                        payBonus: {method: 'POST', params: {loanId: '@loanId', command: 'loanbonus' }}
                     }),
                     LoanAccountResource: defineResource(apiVer + "/loans/:loanId/:resourceType/:chargeId", {loanId: '@loanId', resourceType: '@resourceType', chargeId: '@chargeId'}, {
                         getLoanAccountDetails: {method: 'GET', params: {}},
@@ -698,7 +702,41 @@
                     twoFactorConfigResource: defineResource(apiVer+"/twofactor/configure", {}, {
                         getAllConfigs: {method: 'GET', params: {}},
                         put: {method: 'PUT', params: {}}
-                    })
+                    }),
+                    bankCatalogueResource: defineResource(apiVer + "/banks/:bankId", {bankId: "@bankId"}, {
+                        getAllBanks: {method: 'GET', params: {}, isArray: true},
+                        get: {method: 'GET', params: {bankId: '@bankId'}},
+                        update: { method: 'PUT', params: {bankId: '@bankId'}},
+                        delete: { method: 'DELETE', params: {bankId: '@bankId'}},
+                        save: {method: 'POST', params: {}}
+                    }),
+                    bankCatalogueOptionsResource: defineResource(apiVer + "/banks/template", {}, {
+                        get: {method: 'GET', params: {}},
+                    }),
+                    bankAccountsResource: defineResource(apiVer + "/bank/:bankId/accounts/:accountId", {bankId: "@bankId", accountId:"@accountId"}, {
+                        getAllAccounts: {method: 'GET', params: {bankId: '@bankId'}, isArray: true},
+                        get: {method: 'GET', params: {bankId: '@bankId', accountId: '@accountId'}},
+                        update: { method: 'PUT', params: {bankId: '@bankId', accountId: '@accountId'}},
+                        delete: { method: 'DELETE', params: {bankId: '@bankId', accountId: '@accountId'}},
+                        save: {method: 'POST', params: {bankId: '@bankId'}}
+                    }),
+                    bankAccountOptionsResource: defineResource(apiVer + "/bank/:bankId/accounts/template", {bankId: "@bankId"}, {
+                        get: {method: 'GET', params: {bankId: '@bankId'}},
+                    }),
+                    loanBonusResource: defineResource(apiVer + "/loan/:loanId/bonus", {loanId: "@loanId"}, {
+                        get: {method: 'GET', params: {loanId: '@loanId'}},
+                        collect: {method: 'POST', params: {loanId: '@loanId', command: 'collect'}},
+                        cancel: {method: 'POST', params: {loanId: '@loanId', command: 'cancel'}},
+                    }),
+                    loanBonusConfigResource: defineResource(apiVer + "/loan/bonus/configuration/:configId", {configId: "@configId"}, {
+                        get: {method: 'GET', params: {configId: '@configId'}},
+                        update: { method: 'PUT', params: {configId: '@configId'}},
+                        save: {method: 'POST', params: {}}
+                    }),
+                    banksAccountsResource: defineResource(apiVer + "/banks/accounts", {}, {
+                        getRepaymentsAccounts: {method: 'GET', params: {usage: 2}, isArray: true},
+                        getDisbursementAccounts: {method: 'GET', params: {usage: 3}, isArray: true},
+                    }),
                 };
             }];
         }

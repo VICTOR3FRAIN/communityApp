@@ -12,6 +12,10 @@
                 }
             });
 
+            resourceFactory.officeTemplateResource.get(function (data) {
+                scope.officeTypes = data.officeTypes;
+            });
+
              scope.minDat = function() {
                  for(var i=0;i<scope.offices.length;i++) {
                      if ((scope.offices[i].id) === (scope.formData.parentId)) {

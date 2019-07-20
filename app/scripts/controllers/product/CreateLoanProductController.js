@@ -3,6 +3,7 @@
         CreateLoanProductController: function (scope, $rootScope, resourceFactory, location, dateFilter,WizardHandler) {
             scope.restrictDate = new Date();
             scope.formData = {};
+            scope.loanBonusFormData = {};
             scope.loanproduct = {};
             scope.charges = [];
             scope.accountingOptions = ['None','Cash','Accrual(Periodic)','Accrual(Upfront)'];
@@ -84,6 +85,11 @@
                 scope.isClicked = false;
             });
 
+            resourceFactory.taxgroup.getAll(function (data) {
+				scope.taxGroups = data;
+			});
+
+
              scope.$watch('formData',function(newVal){
                 scope.loanproduct = angular.extend(scope.loanproduct,newVal);
              },true);
@@ -124,6 +130,21 @@
             scope.deleteCharge = function (index) {
                 scope.charges.splice(index, 1);
             };
+
+            scope.taxGroupSelected = function (groupId) {
+				var group = scope.taxGroups.filter(function(x) { return x.id === groupId; })[0];
+				if (group) {
+					scope.taxComponents = group.taxAssociations.map(function(x) {
+						x.taxComponent.startDate = x.startDate;
+						x.taxComponent.excluded = x.excluded;
+						return x.taxComponent;
+					});
+				}
+            };
+            
+            scope.deleteTaxComponent = function(index) {
+				scope.taxComponents.splice(index, 1);
+			};
 
             //advanced accounting rule
             scope.showOrHide = function (showOrHideValue) {
@@ -325,6 +346,7 @@
                 this.formData.dateFormat = scope.df;
                 this.formData.startDate = reqFirstDate;
                 this.formData.closeDate = reqSecondDate;
+                this.formData.taxComponents = scope.taxComponents;
 
                 //Interest recalculation data
                 if (this.formData.isInterestRecalculationEnabled) {
@@ -387,9 +409,82 @@
                     delete this.formData.recalculationRestFrequencyNthDayType;
                 }
                 resourceFactory.loanProductResource.save(this.formData, function (data) {
-                    location.path('/viewloanproduct/' + data.resourceId);
+                    scope.loanBonusFormData.loanProductId = data.resourceId;
+                    resourceFactory.loanBonusConfigResource.save(scope.loanBonusFormData, function (data2) {
+                        location.path('/viewloanproduct/' + data.resourceId);
+                    });
                 });
             };
+
+            var loadGlAccounts = function(){
+                resourceFactory.accountCoaResource.getAllAccountCoas({usage: 1}, function (data) {
+                    scope.glAccounts = data;
+                    scope.glAccounts.forEach(element => {
+                        element.autocompleteLabel = element.glCode + " " + element.name;
+                    });
+                });
+            }
+            loadGlAccounts();
+
+            scope.addCycle = function(){
+                scope.showErrorCycle = false;
+                if(this.LoanBonusConfiguration.cycleToValue.$valid &&
+                    this.LoanBonusConfiguration.cycleFromValue.$valid &&
+                    this.LoanBonusConfiguration.cyclePercentValue.$valid 
+                    && this.newcycle.fromValue && this.newcycle.toValue && this.newcycle.percentValue){
+                    if(!scope.loanBonusFormData.cycles)
+                        scope.loanBonusFormData.cycles = [];
+                    var conflict = false;
+                    for (let index = 0; index < scope.loanBonusFormData.cycles.length; index++) {
+                        const element = scope.loanBonusFormData.cycles[index];
+                        if(this.newcycle.fromValue >= element.fromValue && this.newcycle.fromValue <= element.toValue)
+                            conflict = true;
+                        if(this.newcycle.toValue >= element.fromValue && this.newcycle.toValue <= element.toValue)
+                            conflict = true;
+                    }
+                    if(conflict){
+                        scope.showErrorCycle = true;
+                        scope.errorMsgCycle = 'label.rangealreadyincluded';
+                    }
+                    if(!conflict){
+                        scope.loanBonusFormData.cycles.push(scope.deepCopy(this.newcycle));
+                        this.newcycle = {};
+                    }
+                } else {
+                }
+            }
+
+            scope.removeCycle = function(index){
+                scope.loanBonusFormData.cycles.splice(index, 1);
+            }
+
+            scope.selectGlAccountDebit = function(){
+                scope.loanBonusFormData.glAccountToDebitId = scope.loanBonusFormData.glAccountToDebit.id;
+                scope.loanBonusFormData.glAccountToDebit = scope.loanBonusFormData.glAccountToDebit.glCode;
+            }
+
+            scope.selectGlAccountCredit = function(){
+                scope.loanBonusFormData.glAccountToCreditId = scope.loanBonusFormData.glAccountToCredit.id;
+                scope.loanBonusFormData.glAccountToCredit = scope.loanBonusFormData.glAccountToCredit.glCode;
+            }
+
+            scope.deepCopy = function (obj) {
+                if (Object.prototype.toString.call(obj) === '[object Array]') {
+                    var out = [], i = 0, len = obj.length;
+                    for (; i < len; i++) {
+                        out[i] = arguments.callee(obj[i]);
+                    }
+                    return out;
+                }
+                if (typeof obj === 'object') {
+                    var out = {}, i;
+                    for (i in obj) {
+                        out[i] = arguments.callee(obj[i]);
+                    }
+                    return out;
+                }
+                return obj;
+            }
         }
     });
     mifosX.ng.application.controller('CreateLoanProductController', ['$scope','$rootScope', 'ResourceFactory', '$location', 'dateFilter','WizardHandler', mifosX.controllers.CreateLoanProductController]).run(function ($log) {

@@ -156,7 +156,7 @@
 	        <i class="fa fa-question-circle" uib-tooltip="{{'label.tooltip.loanproduct.principalcyclevariations' | translate}}" tooltip-append-to-body="true"></i>
 	    </label>
 	    <div class="col-sm-2">
-	        <a class="btn btn-primary" ng-click="addPrincipalVariation()">{{ 'label.button.add' | translate }}</a>
+	        <a class="btn btn-primary" ng-click="addPrincipalVariation()"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}</a>
 	    </div>
 	    <div data-ng-show="pvFlag" class="col-md-9 col-sm-offset-2">
 	        <table class="table">
@@ -227,7 +227,7 @@
 	        <i class="fa fa-question-circle" uib-tooltip="{{'label.tooltip.loanproduct.numerofrepaymentcyclevariations' | translate}}" tooltip-append-to-body="true"></i>
 	    </label>
 	    <div class="col-sm-2">
-	        <a class="btn btn-primary" ng-click="addNumberOfRepaymentVariation()">{{ 'label.button.add' | translate }}</a>
+	        <a class="btn btn-primary" ng-click="addNumberOfRepaymentVariation()"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}</a>
 	    </div>
 	    <div data-ng-show="rvFlag" class="col-md-9 col-sm-offset-2">
 	        <table class="table">
@@ -361,7 +361,7 @@
 	        <i class="fa fa-question-circle" uib-tooltip="{{'label.tooltip.loanproduct.interestratecyclevariations' | translate}}" tooltip-append-to-body="true"></i>
 	    </label>
 	    <div class="col-sm-2">
-	        <a class="btn btn-primary" ng-click="addInterestRateVariation()">{{ 'label.button.add' | translate }}</a>
+	        <a class="btn btn-primary" ng-click="addInterestRateVariation()"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}</a>
 	    </div>
 	    <div data-ng-show="irFlag" class="col-md-9 col-sm-offset-2">
 	        <table class="table">
@@ -611,6 +611,86 @@
 			   tooltip-append-to-body="true"></i>
 		</div>
 	</div>
+
+	<h3>{{ 'label.heading.loanbonusconfiguration' | translate }}</h3>
+	<hr>
+
+	<div class="form-group">
+			<div style="display: table; padding: 10px;">
+				<div style="display: table-row">
+					<div style="display: table-cell; padding: 5px 10px;">{{'label.totaldaysinarrearallowed' | translate}}</div>
+					<div style="display: table-cell; padding: 5px 10px;"><input ng-required="allowBonusConfiguration" min="1" type="number" ng-model="loanBonusFormData.daysInArrear" style="width: 60px"></div>
+				</div>
+				<div style="display: table-row">
+					<div style="display: table-cell; padding: 5px 10px;">{{'label.clientmustcollectbonuswithin' | translate}}</div>
+					<div style="display: table-cell; padding: 5px 10px;"><input ng-required="allowBonusConfiguration" required min="1" type="number" ng-model="loanBonusFormData.daysToCollectBonus" style="width: 60px">
+						{{'label.days' | translate}}</div>
+				</div>
+			</div>
+
+			<legend class="col-sm-12">{{'label.bonusloancyclesettings' | translate}}:<div></div></legend>
+			<div style="padding: 20px;">
+				{{'label.forloancyclebetween' | translate}}
+				<input style="width: 60px" name="cycleToValue" type="number" min="1" max="{{newcycle.toValue}}" ng-model="newcycle.fromValue">
+				{{'label.and' | translate}} 
+				<input style="width: 60px" name="cycleFromValue" type="number" min="{{newcycle.fromValue}" max="999" ng-model="newcycle.toValue">
+				{{'label.percent' | translate}} 
+					<input style="width: 60px" type="number" min="1" max="100" ng-model="newcycle.percentValue" name="cyclePercentValue"> 
+					<a style="vertical-align: middle;display: inline-block;" ng-click="addCycle()"><i class="fa fa-plus-square fa-2x"></i></a>
+
+					<div class="text-danger">
+					<div ng-show="editloanproductform.cycleToValue.$error.number || editloanproductform.cycleFromValue.$error.number
+						|| editloanproductform.percentValue.$error.number">{{'label.didnotentervalidnumber' | translate}}</div>
+					<div ng-show="editloanproductform.cycleToValue.$error.min">{{'label.greaterthan' | translate}} 1</div>
+					<div ng-show="editloanproductform.cycleToValue.$error.max">{{'label.cantbegreaterthan' | translate}} {{newcycle.toValue}}</div>
+
+					<div ng-show="editloanproductform.cycleFromValue.$error.min">{{'label.greaterthan' | translate}} {{newcycle.fromValue}}</div>
+					<div ng-show="editloanproductform.cycleFromValue.$error.max">{{'label.cantbegreaterthan' | translate}} 999</div>
+
+					<div ng-show="editloanproductform.cyclePercentValue.$error.min">{{'label.greaterthan' | translate}} 1</div>
+					<div ng-show="editloanproductform.cyclePercentValue.$error.max">{{'label.cantbegreaterthan' | translate}} 100</div>
+
+					</div>
+				
+					<div class="alert alert-danger alert-dismissible fade in" ng-show="showErrorCycle" role="alert"> <button ng-click="showErrorCycle=false" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button> {{errorMsgCycle | translate}} </div>
+				<div style="padding: 20px;display: table;">
+					<div ng-repeat="cycle in loanBonusFormData.cycles" style="display: table-row;">
+						<div style="display: table-cell;padding: 5px 5px;">{{'label.cyclebetween' | translate}} {{cycle.fromValue}} {{'label.and' | translate}} {{cycle.toValue}} {{'label.attracts' | translate}} {{cycle.percentValue}}%</div>
+						<div style="display: table-cell;padding: 5px 5px;"><a style="vertical-align: middle;display: inline-block;" ng-click="removeCycle($index)"><i class="fa fa-times fa-2x text-danger"></i></a></div>
+					</div>
+				</div>
+			</div>
+
+			<legend class="col-sm-12">{{'label.accountingssettings' | translate}}:<div></div></legend>
+			<div style="display: table; padding: 15px;">
+				<div style="display: table-row">
+					<div style="display: table-cell; padding: 5px 5px;">
+						{{'label.debitglaccount' | translate}}
+					</div>
+					<div style="display: table-cell; padding: 5px 5px;">
+						<input ng-required="allowBonusConfiguration" type="text" ng-model="loanBonusFormData.glAccountToDebit" placeholder="{{'label.input.ledger_account' | translate}}" 
+						typeahead-on-select="selectGlAccountDebit()"
+						uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
+					</div>
+					<div style="display: table-cell; padding: 5px 5px;">
+						{{'label.whenbonusispaid' | translate}}.
+					</div>
+				</div>
+				<div style="display: table-row">
+					<div style="display: table-cell; padding: 5px 5px;">
+						{{'label.creditglaccount' | translate}}
+					</div>
+					<div style="display: table-cell; padding: 5px 5px;">
+							<input ng-required="allowBonusConfiguration" type="text" ng-model="loanBonusFormData.glAccountToCredit" placeholder="{{'label.input.ledger_account' | translate}}" 
+							typeahead-on-select="selectGlAccountCredit()"
+							uib-typeahead="account as account.autocompleteLabel for account in glAccounts | filter:$viewValue | limitTo:8"/>
+					</div>
+					<div style="display: table-cell; padding: 5px 5px;">
+						{{'label.whenbonusispaid' | translate}}.
+					</div>
+				</div>
+			</div>
+		</div>
 
     <h3>{{ 'label.heading.interestRecalculation' | translate }}</h3>
 	<hr>
@@ -872,7 +952,7 @@
 	    </div>
 	    <div class="col-sm-1">
 	        <button type="button" class="btn btn-primary"
-	                ng-click="chargeSelected(chargeId)">{{ 'label.button.add' | translate }}
+	                ng-click="chargeSelected(chargeId)"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}
 	        </button>
 	    </div>
 	</div>
@@ -916,7 +996,7 @@
 	    </div>
 	    <div class="col-sm-1">
 	        <button type="button" class="btn btn-primary"
-	                ng-click="chargeSelected(penalityId)">{{ 'label.button.add' | translate }}
+	                ng-click="chargeSelected(penalityId)"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}
 	        </button>
 	    </div>
 	</div>
@@ -948,6 +1028,38 @@
 	        </tr>
 	    </table>
 	</div>
+	<h3>{{ 'label.heading.taxesoninterest' | translate }}</h3>
+    <hr>
+    <div class="form-group">
+        <div class="col-sm-3">
+            <select id="taxGroupId" ng-model="taxGroupId" class="form-control"
+                    ng-options="group.id as group.name for group in taxGroups"
+                    value="{{penality.id}}">
+                <option class="displaynone" value="">{{'label.selecttaxgroup' | translate}}</option>
+            </select>
+        </div>
+        <div class="col-sm-1">
+            <button type="button" class="btn btn-primary"
+                    ng-click="taxGroupSelected(taxGroupId)">{{ 'label.button.add' | translate }}
+            </button>
+        </div>
+    </div>
+    <div class="form-group col-md-12">
+        <table class="table width100">
+            <tr class="graybg">
+                <th>{{'label.heading.name' | translate}}</th>
+                <th>{{'label.heading.percentage' | translate}}</th>
+                <th>{{'label.heading.startdate' | translate}}</th>
+                <th>{{'label.heading.actions' | translate}}</th>
+            </tr>
+            <tr ng-repeat="component in taxComponents">
+                <td>{{component.name}}</td>
+                <td><input type="text" ng-model="component.percentage"/></td>
+                <td>{{component.startDate | DateFormat}}</td>
+                <td><a ng-click="deleteTaxComponent($index)"><i class="fa fa-times-circle fa-2x"></i></a></td>
+            </tr>
+        </table>
+    </div>
 	<h3>{{ 'label.heading.accounting' | translate }}</h3>
 	<hr>
 	<div class="radio-inline">
@@ -1106,7 +1218,7 @@
 	<div class="col-md-12" ng-show="showOrHideValue == 'hide'">
 	    <div class="col-md-8">{{'label.heading.configurefundsourcesforpaymentchannels' | translate}}</div>
 	    <div class="col-md-4">
-	        <a class="btn btn-primary" ng-click="addConfigureFundSource()">{{ 'label.button.add' | translate }}</a>
+	        <a class="btn btn-primary" ng-click="addConfigureFundSource()"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}</a>
 	    </div>
 	    <table class="table">
 	        <tr class="graybg">
@@ -1142,7 +1254,7 @@
 	    </table>
 	    <div class="col-md-8">{{'label.heading.mapfeestoincomeaccounts' | translate}}</div>
 	    <div class="col-md-4">
-	        <a class="btn btn-primary" ng-click="mapFees()">{{ 'label.button.add' | translate }}</a>
+	        <a class="btn btn-primary" ng-click="mapFees()"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}</a>
 	    </div>
 	    <table class="table width100">
 	        <tr class="graybg">
@@ -1177,7 +1289,7 @@
 	    </table>
 	    <div class="col-md-8">{{'label.heading.mappenaltiestospecificincomeaccounts' | translate}}</div>
 	    <div class="col-md-4">
-	        <a class="btn btn-primary" ng-click="mapPenalty()">{{ 'label.button.add' | translate }}</a>
+	        <a class="btn btn-primary" ng-click="mapPenalty()"><i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'label.button.add' | translate }}</a>
 	    </div>
 	    <table class="table">
 	        <tr class="graybg">
@@ -1206,13 +1318,13 @@
 	                </select>
 	            </td>
 	            <td></td>
-	            <td class="width30"><a ng-click="deletePenalty($index)"><i class="fa fa-times"></i></a></td>
+	            <td class="width30"><a ng-click="deletePenalty($index)"><i class="fa fa-times-circle fa-2x"></i></a></td>
 	        </tr>
 	    </table>
 	</div>
 	</div>
 	<div class="col-md-offset-5 paddedtop">
-	    <a id="cancel" href="#/viewloanproduct/{{product.id}}" type="reset" class="btn btn-warning" ng-click="cancel()">{{'label.button.cancel' | translate}}</a>
+	    <a id="cancel" href="#/viewloanproduct/{{product.id}}" type="reset" class="btn btn-default" ng-click="cancel()">{{'label.button.cancel' | translate}}</a>
 	    <button id="save" type="submit" class="btn btn-primary" has-permission='UPDATE_LOANPRODUCT'>{{'label.button.save'
 	        | translate}}
 	    </button>

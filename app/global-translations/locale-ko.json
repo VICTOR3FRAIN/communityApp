@@ -14,13 +14,15 @@
 			"SeoJeongHo",
 			"Ykhwong",
 			"아라",
-			"In2acous"
+			"In2acous",
+			"Nuevo Paso"
 		]
 	},
 	"label.heading.shareperclient": "클라이언트마다 공유",
 	"label.heading.suspenseaccount": "미결 계좌",
 	"label.heading.equityaccount": "공평 계좌",
 	"label.heading.name": "이름",
+	"label.heading.alias": "다른 이름",
 	"label.heading.country": "국가",
 	"label.heading.stale_period": "stale_period",
 	"label.heading.startdate": "시작 날짜",
@@ -587,6 +589,7 @@
 	"validation.msg.staff.firstname.cannot.be.blank": "이름은 필수입니다.",
 	"validation.msg.staff.firstname.exceeds.max.length": "이름은 {{params[0].value}}자를 초과할 수 없습니다.",
 	"validation.msg.holiday.date.cannot.be.past.date": "날짜는 과거 날짜가 될 수 없습니다",
+	"validation.msg.tax.component.startDate.is.less.than.date": "시작 날짜는 현재 날짜, 이전 시작 날짜 이후이거나 동일해야 합니다",
 	"label.tooltip.employees.active.true": "활성",
 	"label.tooltip.employees.active.false": "비활성",
 	"label.heading.addcode": "코드 추가",

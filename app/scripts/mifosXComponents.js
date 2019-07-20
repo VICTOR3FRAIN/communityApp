@@ -297,7 +297,6 @@ define(['Q', 'underscore', 'mifosX'], function (Q) {
             'organization/smscampaigns/EditSmsCampaignController',
             'organization/entitydatatablechecks/EntityDatatableChecksController',
             'notification/NotificationsController',
-            'notification/NotificationsController',
             'configurations/AddressFormController',
             'client/EditFamilyMemberController',
             'client/AddFamilyMembersController',
@@ -322,8 +321,10 @@ define(['Q', 'underscore', 'mifosX'], function (Q) {
 			'adhocquery/AdHocQueryListController',
             'adhocquery/CreateAdHocQueryController',
             'adhocquery/ViewAdHocQueryController',
-            'adhocquery/EditAdHocQueryController'
-
+            'adhocquery/EditAdHocQueryController',
+            'organization/banks/BanksController',
+            'organization/banks/BankAccountsController',
+            'system/LoanBonusConfigurationController'
         ],
         filters: [
             'StatusLookup',
